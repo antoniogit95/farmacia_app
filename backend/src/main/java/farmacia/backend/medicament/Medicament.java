@@ -1,4 +1,6 @@
-package farmacia.backend.category;
+package farmacia.backend.medicament;
+
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,12 +10,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Entity
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class Category {
+public class Medicament {
     
     @Id
     @GeneratedValue
@@ -21,4 +23,8 @@ public class Category {
 
     private String name;
     private String descrption;
+    private Double unitPrice;
+    private int stok;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
