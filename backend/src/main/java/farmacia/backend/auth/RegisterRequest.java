@@ -1,5 +1,6 @@
 package farmacia.backend.auth;
 
+import farmacia.backend.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,5 @@ public class RegisterRequest {
     private String address;
     private long telefono;
     private String email;
+    private Role role;
 }
