@@ -97,11 +97,7 @@
         <scope>runtime</scope>
     </dependency>
 	
-   <dependency>
-     <groupId>org.laxture</groupId>
-     <artifactId>skr-app-auth</artifactId>
-     <version>0.3.8</version>
-   </dependency>
+
  </dependencies>
 
 	<build>

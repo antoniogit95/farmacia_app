@@ -1,6 +1,5 @@
 package farmacia.backend.config;
 
-import org.skr.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import farmacia.backend.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 
 @Configurable
