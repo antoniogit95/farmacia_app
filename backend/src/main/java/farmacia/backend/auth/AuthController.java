@@ -17,13 +17,29 @@ public class AuthController {
     
     private final AuthService authService;
 
-     @GetMapping
+    @GetMapping
     public ResponseEntity<String> pruebaGet(){
         return new ResponseEntity<>("mensaje desde back end", HttpStatus.OK);
     }
 
-    @PostMapping(value = "register")
+    @PostMapping(value = "/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request){
+        AuthResponse response = authService.login(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(value = "/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request){
         return ResponseEntity.ok(authService.register(request));
+    }
+
+    @PostMapping(value = "/checkci")
+    public ResponseEntity<Boolean> getChekci(@RequestBody LoginRequest request){
+        return ResponseEntity.ok(false);
+    }
+
+     @PostMapping(value = "/checkusername")
+    public ResponseEntity<Boolean> getChekUsername(@RequestBody LoginRequest request){
+        return ResponseEntity.ok(false);
     }
 }

@@ -1,0 +1,98 @@
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingIcon {
+  animation: spin 1s linear infinite;
+}
+
+.stylesLoginContainer {
+    width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ccc;
+  }
+  
+  .stylesH2Login{
+    text-align: center;
+    color: black;
+    padding: auto;
+  }
+
+  .stylesInput {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+
+  .stylesContenedorButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .stylesButoonLogin {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    background-color: #eb2929;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer; 
+    transition: .3s;
+  }
+
+  .stylesButoonLogin:hover {
+    background-color: #eb2929;
+    justify-content: center;
+  }
+
+  .styleLinks {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .styleLinksA {
+    color: #135DAD;
+    display: block;
+    padding: 3px;
+    text-decoration: none;
+  }
+  
+  .styleLinksA:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .stylesErrosGeneral {
+    background-color: crimson;
+    padding: 10px;
+    color: wheat;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+.stylesLoginContainer{
+  color: #D3D6E0;
+  background-color: #3A3F49;
+  border-radius: 20px;
+}
+.stylesH2Login{
+  color: #D3D6E0;
+}

@@ -15,9 +15,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
     
-    private PersonRepository personRepository;
-    private PasswordEncoder passwordEncoder;
-    private UserRepository userRepository;
+    private final PersonRepository personRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+
+    public AuthResponse login(LoginRequest request){
+        AuthResponse response = new AuthResponse();
+        response.setMessage("error de usuario");
+        response.setSuccess(false);
+        return response;
+    }
 
     public  AuthResponse register(RegisterRequest request){
         Person person = Person.builder()
