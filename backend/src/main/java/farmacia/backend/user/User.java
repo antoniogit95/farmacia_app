@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name = "usuarios", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
 public class User {
 
     @Id
@@ -34,7 +34,7 @@ public class User {
     private String username;
 
     private String password;
-    private boolean active;
+    private boolean status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

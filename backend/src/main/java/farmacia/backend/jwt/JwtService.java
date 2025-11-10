@@ -15,7 +15,7 @@ import farmacia.backend.user.Role;
 import farmacia.backend.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 
 @Service
@@ -62,6 +62,7 @@ public class JwtService {
             .build()
             .parseClaimsJws(token)
             .getBody();
+
     }
 
     public <T> T getClaim(String token, Function<Claims, T> claimsResolver){
