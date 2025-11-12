@@ -75,27 +75,24 @@ export const Login = () => {
 
                 onSubmit={ async (valores) => {
                     setLoading(true);
-                    console.log(endPoint);
-                    console.log(valores);
 
                     try {
                         const response = await axios.post(endPoint, {
                             username: valores.user,
                             password: valores.pass
                         });
-
                         if (response.data.success) {
-                            auth.saveToken(response.data.data);
+                            auth.saveToken(response.data.token);
                             navigate("/home");
                         } else {
                             adminErrros(response.data.message);
                         }
                     } catch (error) {
-                        console.log(error.code);
+                        console.log(error);
                         if (error.code === "ERR_NETWORK") {
                             adminErrros("No hay conexión con el servidor");
                         } else {
-                            adminErrros(error.response?.data?.message || "Error de inesperado, contactese con el administrador");
+                            adminErrros(error.response?.data?.message || "Error inesperado, contactese con el administrador");
                         }
                     } finally {
                         setLoading(false);

@@ -1,0 +1,57 @@
+.stylesModalMenu {
+    position: absolute;
+    top: 40px;
+    width: 300px;
+    left: 34rem;
+}
+
+.modalHeader{
+    background-color: #3A3F49;
+    color: #D3D6E0;
+    border-color: #eb2929;
+
+}
+
+.modalBody{
+    background-color: #3A3F49;
+}
+
+.stylesContetMenuUser{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #3A3F49;
+}
+
+.styleContentButoon{
+    width: 100%;
+    padding: 0px;
+}
+
+.stylesLinkMenuUser{
+    color: #D3D6E0;
+    padding: 2px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.stylesLinkMenuUser:hover {
+    background-color: #e04c4c7f;
+}
+
+.stylesContentImgMenuUser{ 
+    width: 100%;
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;  
+}
+
+.styleIconUserMenu {
+    width: 145px;
+    height: 145px;
+}

@@ -69,6 +69,7 @@ export const AuthProvider = ({ children }) =>{
     }
 
     function saveToken(token){
+        console.log("llego aqui", token)
         setAccessToekn(token);
         const decodedToken = parseJwt(token);
         localStorage.setItem("user_data", JSON.stringify({

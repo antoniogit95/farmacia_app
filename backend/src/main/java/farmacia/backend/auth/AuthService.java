@@ -43,6 +43,7 @@ public class AuthService {
             return ResponseEntity.ok(AuthResponse.builder()
                 .token(token)
                 .message("Token con exito")
+                .success(true)
                 .build());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(AuthResponse.builder()
