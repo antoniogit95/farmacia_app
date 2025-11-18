@@ -12,14 +12,14 @@ export const FormsAddMedication = () => {
     const token = JSON.parse(personData).token;
 
     const sugesRole = [
-        {id: 1, presentation: "CAPSULES"},
-        {id: 2, presentation: "TABLETS"},
-        {id: 3, presentation: "SYRUP"},
-        {id: 4, presentation: "INJECTION"},
-        {id: 5, presentation: "DROPS"},
-        {id: 6, presentation: "CREAM"},
-        {id: 7, presentation: "OINTMENT"},
-        {id: 8, presentation: "SPRAY"},
+        {id: 1, presentation: "CAPSULES"},//comprmidos
+        {id: 2, presentation: "TABLETS"},//tabletas
+        {id: 3, presentation: "SYRUP"},//jarabe
+        {id: 4, presentation: "INJECTION"},//injeccion
+        {id: 5, presentation: "DROPS"},//gotas
+        {id: 6, presentation: "CREAM"},//crema
+        {id: 7, presentation: "OINTMENT"},//pomada
+        {id: 8, presentation: "SPRAY"},//aerosol
     ];
 
     const config = {

@@ -1,0 +1,11 @@
+
+.stylesAddMedicament{
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.stylesAddMedication{
+    display: flex;
+    padding: 20px;
+}

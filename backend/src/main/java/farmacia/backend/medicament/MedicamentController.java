@@ -1,6 +1,5 @@
 package farmacia.backend.medicament;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,11 +13,11 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/api/v1/medicament")
 public class MedicamentController {
     
-   //public final MedicamentService mService;
+    public final MedicamentService mService;
 
     @PostMapping("/add")
     public ResponseEntity<String> addMedicament(@RequestBody Medicament medicament){
-        return new ResponseEntity<>("exitos", HttpStatus.OK);
+        return mService.addMedicament(medicament);
     }
 
 }
