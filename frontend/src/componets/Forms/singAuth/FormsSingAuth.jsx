@@ -2,7 +2,7 @@ import './FormsSingAuth.css';
 import React from "react";
 import { Formik, Field } from 'formik';
 import axios from 'axios';
-import { URL_API_public } from '../../providerContext/EndPoint';
+import { URL_API_public } from '../../../providerContext/EndPoint';
 import { useNavigate } from 'react-router-dom';
 import {ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

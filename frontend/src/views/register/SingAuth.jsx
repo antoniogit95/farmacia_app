@@ -1,6 +1,6 @@
 import React from "react";
 import './SingAuth.css'
-import { FormsSingAuth } from "../../componets/Forms/FormsSingAuth";
+import { FormsSingAuth } from "../../componets/Forms/singAuth/FormsSingAuth";
 
 export const SingAuth = () => {
     return(<>

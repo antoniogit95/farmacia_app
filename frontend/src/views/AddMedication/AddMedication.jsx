@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { NavBar} from "../../componets/NavBar/NavBar";
+import { FormsAddMedication } from "../../componets/Forms/addMedication/FormsAddMedication";
  
 export const AddMedication = () => {
     
@@ -9,6 +10,7 @@ export const AddMedication = () => {
     return (<>
         <NavBar></NavBar>
         <button>agregar medicamentos</button>
+        <FormsAddMedication></FormsAddMedication>
         <button>agregar lote</button>
     </>);
 }
