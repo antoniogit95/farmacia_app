@@ -36,6 +36,7 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 10px;
+    box-sizing: border-box; 
   }
 
   .stylesContenedorButton {
@@ -49,7 +50,7 @@
     display: flex;
     justify-content: center;
     padding: 10px;
-    background-color: #eb2929;
+    background-color: #64c27b;
     color: white;
     border: none;
     border-radius: 10px;
@@ -58,7 +59,7 @@
   }
 
   .stylesButoonLogin:hover {
-    background-color: #eb2929;
+    background-color: #2a8c4a;
     justify-content: center;
   }
 
@@ -88,6 +89,7 @@
     align-items: center;
     justify-content: center;
   }
+
 .stylesLoginContainer{
   color: #D3D6E0;
   background-color: #3A3F49;

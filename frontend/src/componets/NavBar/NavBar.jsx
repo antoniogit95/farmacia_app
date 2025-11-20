@@ -5,6 +5,7 @@ import { useAuth } from "../../providerContext/AuthProvider";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaUserCircle } from "react-icons/fa"
 import { ModalsUserMenu } from "../Modals/ModalsUserMenu/ModalUserMenu"
+import logoFarmacia from "../../images/logoFarmacia.png"
 
 export const NavBar = () => {
     const [showModal, setShowModal] = useState(false);
@@ -60,44 +61,44 @@ export const NavBar = () => {
 
     return(<>
       <nav className="stylesNavBar">
-      <div className='cabecera'>
-        <p className="letrahora">Hora actual del Sistema: {currentTime.toLocaleTimeString()}</p>
-      </div>
+        <div className="stylesLogoContainer">
+          <img className = "stylesImgLogo" src={logoFarmacia} alt="logo" />
+        </div>
         <button className="stylesImgContainerNavBar" onClick={() => {setIsNavExpanded(!isNavExpanded)}}>
             <GiHamburgerMenu className="stylesIcon"/>
         </button>
-        <ul className={isNavExpanded? "stylesUl-expanded": "stylesUl"}>
-            {(isAdmin || isPharmacist || isCustomer) && ( <li className="stylesLi">
-                <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
-                to="/home">Home</NavLink></li>
-            )}
-            
-            {(isAdmin || isPharmacist || isCustomer) && ( <li className="stylesLi">
-                <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
-                to="/medication">Medicamentos</NavLink></li>
-            )}
-            
+          <ul className={isNavExpanded? "stylesUl-expanded": "stylesUl"}>
+              {(isAdmin /**|| isPharmacist*/ ) && ( <li className="stylesLi">
+                  <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
+                  to="/home">Home</NavLink></li>
+              )}
+              
+              {(isAdmin || isPharmacist || isCustomer) && ( <li className="stylesLi">
+                  <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
+                  to="/medication">Medicamentos</NavLink></li>
+              )}
+              
 
-            {isAdmin && ( <li className="stylesLi">
-                <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
-                to="/personal">Personal</NavLink></li>
-            )}
+              {isAdmin && ( <li className="stylesLi">
+                  <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
+                  to="/personal">Personal</NavLink></li>
+              )}
 
-            {(isAdmin || isPharmacist || isCustomer) && ( <li className="stylesLi">
-                <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
-                to="/addmedication">Agregar Medicamentos</NavLink></li>
-            )}
+              {(isAdmin ) && ( <li className="stylesLi">
+                  <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
+                  to="/addmedication">Agregar Medicamentos</NavLink></li>
+              )}
 
-            {(isAdmin || isPharmacist) && ( <li className="stylesLi">
-                    <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
-                    to="/reportes">Reportes</NavLink></li>
-                )}
-            <div>
-                <button className="stylesIconButton" onClick={() => setShowModal(true)}>
-                    <FaUserCircle className="stylesIcon"/>
-                </button>
-            </div>
-        </ul>
+              {(isAdmin) && ( <li className="stylesLi">
+                      <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
+                      to="/reportes">Reportes</NavLink></li>
+                  )}
+          </ul>
+          <div>
+                  <button className="stylesIconContainer" onClick={() => setShowModal(true)}>
+                      <FaUserCircle className="stylesIcon"/>
+                  </button>
+              </div>
     </nav>
     <ModalsUserMenu
         onVerUsuario={handleVerUsuario}

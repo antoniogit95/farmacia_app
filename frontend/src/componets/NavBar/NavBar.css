@@ -1,5 +1,5 @@
 .stylesImgLogo {
-    width: 65px;  /* Ajusta el tamaño según tus necesidades */
+    width: 150px;  /* Ajusta el tamaño según tus necesidades */
     height: auto;  /* Esto asegura que la proporción de la imagen se mantenga */
   }
 
@@ -14,19 +14,12 @@
     left: 0; 
     z-index: 1000; 
     padding: 0.5rem;
-    background-color: rgba(238, 6, 6, 0.9) ;
-    box-shadow: 0 2px 2px 2px rgba(248, 1, 1, 0.938);
+    background-color: #2a8c4a ;
 }
 
 .stylesLogoContainer {
     display: flex;
     align-items: center;
-    margin-left: 1rem;
-}
-
-.stylesH2{
-    color: red;
-    margin: 0;
 }
 
 .stylesImgContainerNavBar{
@@ -44,23 +37,25 @@
     display: none;
 }
 
-.stylesImgContainerNavBar:hover{
-    background-color: rgb(223, 31, 31);
-}
-
-.stylesIconButton{
-    border: 0;
-    height: 35px;
+.stylesIconContainer{
+    border: 5px;
+    height: 60px;
     width: auto;
-    padding: 0;
+    padding: 0.5rem 2rem 0.5rem 0.5rem;
     border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0);
+    background-color: #2a8c4a;
     color: rgb(245, 242, 242);
 }
 
 .stylesIcon{
     width: 100%;
     height: 100%;
+    padding: 3px;
+    background-color: #64c27b ;
+    color: rgb(245, 242, 242) ;
+}
+.stylesIcon:hover{
+    background-color: #2a8c4a ;
 }
 .stylesUl{
     width: auto;
@@ -85,12 +80,12 @@
 }
 
 .stylesA:hover{
-    background-color: rgb(223, 31, 31);
+    background-color: #64c27b;
     border-color: white;
 }
 
 .stylesActive{
-    background-color: red;
+    background-color: #64c27b;
     color: white;
     text-decoration: none;
     margin-right: 1rem;
@@ -178,7 +173,3 @@
     
 }
 
-.stylesIcon{
-    background-color: rgba(238, 6, 6, 0.9) ;;
-    color: rgb(245, 242, 242) ;;
-}

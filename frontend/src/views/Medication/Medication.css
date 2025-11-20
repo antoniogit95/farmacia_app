@@ -1,22 +1,15 @@
 
 .stylesContentMedicament {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  height: calc(100vh -100px); 
-  gap: 12px;
-  padding: 12px;
-  background: #f4f6f8; 
-}
-
-.stylesColum {
-  border-radius: 10px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-  background-color: red;
-  overflow-y: auto;
-  padding: 20px;
+  position: relative;
+  padding: 15px;
+  width: 100%;
+  height: 100%;
+  top: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2rem;
-  font-weight: 500;
+  flex-direction: column;
+  overflow: auto;
+  box-sizing: border-box;
 }
+

@@ -106,6 +106,7 @@ export const Login = () => {
                     <div className={exisError? 'stylesErrosGeneral': ''}>
                         <label >{error}</label>
                     </div>
+                    <label>usuario/correlo electronio</label>
                     <div>
                         <input 
                             className='stylesInput'
@@ -120,6 +121,7 @@ export const Login = () => {
                         {touched.user && errors.user && <div className='styleErrores'>{errors.user}</div>}
                     </div>
                     <div>    
+                        <label > contraseña </label>
                         <input 
                             className='stylesInput'
                             type='password'
@@ -140,7 +142,7 @@ export const Login = () => {
                     </div>
                     <div className="styleLinks">
                         <NavLink to="/singauth" className="styleLinksA">Crear cuenta</NavLink>
-                        <NavLink to= '/forgenpassword' className="styleLinksA">Olvide mi Contraseña</NavLink>
+                        {/** <NavLink to= '/forgenpassword' className="styleLinksA">Olvide mi Contraseña</NavLink>*/}
                     </div>
                 </form>
                 )}

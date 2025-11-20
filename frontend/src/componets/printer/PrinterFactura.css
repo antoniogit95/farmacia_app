@@ -1,0 +1,13 @@
+.stylesButoonPrinter{
+    background-color: #64c27b;
+    width: 100%;
+    padding: 12px;
+    color: black;
+    font-size: 16px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.stylesButoonPrinter:hover {
+    background-color: #2a8c4a;
+}
