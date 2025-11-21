@@ -106,8 +106,6 @@ export const FormsSingAuth = () => {
                     //validacion correo electronio o username
                     if(!valores.email){
                         errores.email = 'el campo Correo Electronico es requerido obligatoriamente';
-                    }else if(valores.email.length < 6){
-                        errores.email = 'debe tener un longitud minima de 6 caracteres';
                     }else if( await emailExistente(valores.email)){
                         errores.email = 'el correo electronico ya fue registrado';
                     }
@@ -258,13 +256,13 @@ export const FormsSingAuth = () => {
                         {touched.role && errors.role && <div className='styleErrores'>{errors.role}</div>}
                     </div>
                     <div>
-                        <label htmlFor='email'>Correo Electronico</label>
+                        <label htmlFor='email'>Usuario</label>
                         <input 
                             className='stylesInput'
                             type='text'
                             id='email'
                             name='email'
-                            placeholder='Escribe tu Correo Electronio'
+                            placeholder='Escribe tu Usuario'
                             value={values.email}
                             onChange={handleChange}
                             onBlur={handleBlur}

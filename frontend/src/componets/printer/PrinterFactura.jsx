@@ -14,12 +14,29 @@ export default function PrintFile({ items }) {
     let y = 10;
 
     // Encabezado de farmacia
+    doc.setFontSize(12);
+    doc.text("RESUMEN DE COMPRAS", 10, y);
+    y += 6;
+
     doc.setFontSize(14);
     doc.text("FARMACIA TELLEZ", 10, y);
     y += 6;
 
+
     doc.setFontSize(10);
-    doc.text("RESUMEN DE COMPRAS", 10, y);
+    doc.text("ZONA TACOPOCA, AV. INGAVI \nESQ. SANTA CRUZ", 10, y);
+    y += 6;
+
+    doc.setFontSize(10);
+    doc.text("", 10, y);
+    y += 6;
+
+    doc.setFontSize(10);
+    doc.text("TELEFONO: 71752959", 10, y);
+    y += 6;
+
+    doc.setFontSize(12);
+    doc.text("EMAIL: farmaciatellez1@gmail.com", 10, y);
     y += 6;
 
     doc.text("Fecha: " + new Date().toLocaleString(), 10, y);

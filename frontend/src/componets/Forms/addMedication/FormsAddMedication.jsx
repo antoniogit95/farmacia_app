@@ -18,8 +18,9 @@ export const FormsAddMedication = () => {
         {id: 4, presentation: "INJECTION"},//injeccion
         {id: 5, presentation: "DROPS"},//gotas
         {id: 6, presentation: "CREAM"},//crema
-        {id: 7, presentation: "OINTMENT"},//pomada
-        {id: 8, presentation: "SPRAY"},//aerosol
+        {id: 7, presentation: "OVULOS_VAGINALES"},
+        {id: 8, presentation: "OINTMENT"},//pomada
+        {id: 9, presentation: "SPRAY"},//aerosol
     ];
 
     const config = {
@@ -36,6 +37,8 @@ export const FormsAddMedication = () => {
                     comercialName: '',
                     descrption: '',
                     presentation:'CAPSULES',
+                    concentration: '',
+                    farmaciForm: '',
                     laboratory: '',
                 }}
 
@@ -60,6 +63,11 @@ export const FormsAddMedication = () => {
                     //validacion laboratory
                     if(!valores.laboratory){
                         errores.laboratory = 'el campo laboratorio es requerido obligatoriamente';
+                    }
+
+                    //validacion Concentration
+                    if(!valores.concentration){
+                        errores.concentration = 'el campo Concentracion es requerido obligatoriamente';
                     }
                     return errores;
                 }}
@@ -109,7 +117,7 @@ export const FormsAddMedication = () => {
                             type='text'
                             id='genericName'
                             name='genericName'
-                            placeholder='escribe tu numero de carnet'
+                            placeholder='escribe el nombre generico'
                             value={values.genericName}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -125,7 +133,10 @@ export const FormsAddMedication = () => {
                             name='comercialName'
                             placeholder='Escribe tu nombre comercial'
                             value={values.comercialName}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                                e.target.value = e.target.value.toUpperCase();
+                                handleChange(e);
+                            }}  
                             onBlur={handleBlur}
                         />
                         {touched.comercialName && errors.comercialName && <div className='styleErrores'>{errors.comercialName}</div>}
@@ -137,7 +148,7 @@ export const FormsAddMedication = () => {
                             type='text'
                             id='descrption'    
                             name='descrption'
-                            placeholder='Escribe una pequenia descripcion'
+                            placeholder='Escribe una pequeña descripcion'
                             value={values.descrption}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -146,7 +157,7 @@ export const FormsAddMedication = () => {
                     </div>
                     
                     <div>
-                        <label htmlFor='presentation'>Role</label>
+                        <label htmlFor='presentation'>Presentacion</label>
                         <Field
                             as='select'
                             className='stylesInput'
@@ -160,7 +171,35 @@ export const FormsAddMedication = () => {
                                     </option>
                                 ))}
                         </Field>
-                        {touched.role && errors.role && <div className='styleErrores'>{errors.role}</div>}
+                        {touched.presentation && errors.presentation && <div className='styleErrores'>{errors.presentation}</div>}
+                    </div>
+                    <div>
+                        <label htmlFor='concentration'>Consentracion</label>
+                        <input 
+                            className='stylesInput'
+                            type='text'
+                            id='concentration'
+                            name='concentration'
+                            placeholder='Escribe la consentracion'
+                            value={values.concentration}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+                        {touched.concentration && errors.concentration && <div className='styleErrores'>{errors.concentration}</div>}
+                    </div>
+                    <div>
+                        <label htmlFor='farmaciForm'>Forma farmaceutica</label>
+                        <input 
+                            className='stylesInput'
+                            type='text'
+                            id='farmaciForm'
+                            name='farmaciForm'
+                            placeholder='Escribe tu laboratorio'
+                            value={values.farmaciForm}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+                        {touched.farmaciForm && errors.farmaciForm && <div className='styleErrores'>{errors.farmaciForm}</div>}
                     </div>
                     <div>
                         <label htmlFor='laboratory'>laboratorio</label>

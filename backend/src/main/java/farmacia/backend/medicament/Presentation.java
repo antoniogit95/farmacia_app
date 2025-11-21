@@ -8,5 +8,6 @@ public enum Presentation {
     DROPS,
     CREAM,
     OINTMENT,
-    SPRAY
+    SPRAY,
+    OVULOS_VAGINALES
 }
