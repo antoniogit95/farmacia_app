@@ -18,6 +18,8 @@ export const NavBar = () => {
     const navigate = useNavigate();
     const auth = useAuth();
     const [currentTime, setCurrentTime] = useState(new Date());
+    const [isOpenAdd, setIsOpenAdd] = useState(false);
+
 
 
     useEffect(() => {
@@ -75,7 +77,7 @@ export const NavBar = () => {
               
               {(isAdmin || isPharmacist || isCustomer) && ( <li className="stylesLi">
                   <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
-                  to="/medication">Medicamentos</NavLink></li>
+                  to="/medication">Ventas</NavLink></li>
               )}
               
 
@@ -84,9 +86,37 @@ export const NavBar = () => {
                   to="/personal">Personal</NavLink></li>
               )}
 
-              {(isAdmin ) && ( <li className="stylesLi">
-                  <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
-                  to="/addmedication">Agregar Medicamentos</NavLink></li>
+              {isAdmin && (
+                <li className="stylesLi submenu-container">
+                  <button 
+                    className="stylesA submenu-btn"
+                    onClick={() => setIsOpenAdd(!isOpenAdd)}
+                  >
+                    Medicamentos ▾
+                  </button>
+
+                  {isOpenAdd && (
+                    <ul className="submenu">
+                      <li>
+                        <NavLink 
+                          className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
+                          to="/addmedication"
+                        >
+                          ➤ Agregar Medicamento
+                        </NavLink>
+                      </li>
+
+                      <li>
+                        <NavLink 
+                          className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
+                          to="/addstock"
+                        >
+                          ➤ Stock de Productos
+                        </NavLink>
+                      </li>
+                    </ul>
+                  )}
+                </li>
               )}
 
               {(isAdmin) && ( <li className="stylesLi">

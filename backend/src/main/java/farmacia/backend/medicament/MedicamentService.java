@@ -1,11 +1,13 @@
 package farmacia.backend.medicament;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import farmacia.backend.medicament.presentation.PresentationService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -13,14 +15,15 @@ import lombok.RequiredArgsConstructor;
 public class MedicamentService {
     
     private final MedicamentRepository mRepository;
+    private final PresentationService pService;
 
-    public ResponseEntity<String> addMedicament(Medicament medicamentRequest){
+    public ResponseEntity<String> addMedicament(MedicamentRequest medicamentRequest){
         try {
             Medicament medicament = Medicament.builder()
                 .genericName(medicamentRequest.getGenericName())
                 .comercialName(medicamentRequest.getComercialName())
                 .descrption(medicamentRequest.getDescrption())
-                .presentation(medicamentRequest.getPresentation())
+                .presentation(pService.getAddByName(medicamentRequest.getPresentation()))
                 .laboratory(medicamentRequest.getLaboratory())
                 .createdAt(getTimestamp())
                 .updatedAt(getTimestamp())
@@ -31,6 +34,11 @@ public class MedicamentService {
             System.out.println(e);
             return new ResponseEntity<>("not found", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public ResponseEntity<List<Medicament>> getAllMedicaments(){
+        List<Medicament> medicaments = mRepository.findAll();
+        return ResponseEntity.ok(medicaments);
     }
 
     public LocalDateTime getTimestamp(){

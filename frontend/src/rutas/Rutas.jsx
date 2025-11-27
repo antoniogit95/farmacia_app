@@ -5,6 +5,7 @@ import { Home } from "../views/Home/Home";
 import { ProtectedRoutes } from "./ProtectedRoutes";
 import { Medication } from "../views/Medication/Medication";
 import { AddMedication } from "../views/AddMedication/AddMedication";
+import { AddStock } from "../views/addStock/AddStock";
 
 export const Rutas = createBrowserRouter([
   
@@ -15,7 +16,8 @@ export const Rutas = createBrowserRouter([
     children:[
       { path:'/home', element:<Home/> },
       { path: '/medication', element:<Medication/>},
-      { path: '/addmedication', element: <AddMedication/>}
+      { path: '/addmedication', element: <AddMedication/>},
+      { path: '/addstock', element: <AddStock/>}
     ]
   },  
 ]); 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field } from 'formik';
 import { URL_API_private } from "../../../providerContext/EndPoint";
 import axios from 'axios';
@@ -10,18 +10,20 @@ export const FormsAddMedication = () => {
     const personData = localStorage.getItem('user_data');
     const endPoint = URL_API_private + "/medicament/add";
     const token = JSON.parse(personData).token;
+    const [presentations, setPresentations] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [filtered, setFieltered] = useState([]);
+    const sugesRole = [];
 
-    const sugesRole = [
-        {id: 1, presentation: "CAPSULES"},//comprmidos
-        {id: 2, presentation: "TABLETS"},//tabletas
-        {id: 3, presentation: "SYRUP"},//jarabe
-        {id: 4, presentation: "INJECTION"},//injeccion
-        {id: 5, presentation: "DROPS"},//gotas
-        {id: 6, presentation: "CREAM"},//crema
-        {id: 7, presentation: "OVULOS_VAGINALES"},
-        {id: 8, presentation: "OINTMENT"},//pomada
-        {id: 9, presentation: "SPRAY"},//aerosol
-    ];
+    useEffect(() =>{
+        const fetchData = async () => {
+            const response = await axios.get(URL_API_private+"/presentation/list", {
+                headers: config.headers
+            });
+            setPresentations(response.data);
+        }
+        fetchData();
+    }, [])
 
     const config = {
         headers: {
@@ -36,7 +38,7 @@ export const FormsAddMedication = () => {
                     genericName: '',
                     comercialName: '',
                     descrption: '',
-                    presentation:'CAPSULES',
+                    presentation:'',
                     concentration: '',
                     farmaciForm: '',
                     laboratory: '',
@@ -71,7 +73,7 @@ export const FormsAddMedication = () => {
                     }
                     return errores;
                 }}
-                onSubmit={ (valores) => {
+                onSubmit={ (valores, {resetForm}) => {
                     const store = async (e) => {
                         console.log(valores)
                         console.log("end point: "+endPoint)
@@ -91,7 +93,7 @@ export const FormsAddMedication = () => {
                                 position: 'top-right',
                                 autoClose: 3000,      
                             });
-                            navigate('/login');  
+                            resetForm();  
                         } catch (error) {
                             console.log(error)
                             console.log("mensaje")
@@ -119,7 +121,10 @@ export const FormsAddMedication = () => {
                             name='genericName'
                             placeholder='escribe el nombre generico'
                             value={values.genericName}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                                e.target.value = e.target.value.toUpperCase();
+                                handleChange(e);
+                            }}
                             onBlur={handleBlur}
                         />
                         {touched.genericName && errors.genericName && <div className='styleErrores'>{errors.genericName}</div>}
@@ -150,7 +155,10 @@ export const FormsAddMedication = () => {
                             name='descrption'
                             placeholder='Escribe una pequeña descripcion'
                             value={values.descrption}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                                e.target.value = e.target.value.toUpperCase();
+                                handleChange(e);
+                            }}
                             onBlur={handleBlur}
                         />
                         {touched.descrption && errors.descrption && <div className='styleErrores'>{errors.descrption}</div>}
@@ -158,21 +166,50 @@ export const FormsAddMedication = () => {
                     
                     <div>
                         <label htmlFor='presentation'>Presentacion</label>
-                        <Field
-                            as='select'
+                        <input  
                             className='stylesInput'
-                            id='presentation'
+                            type='text'
+                            id='presentation' 
                             name='presentation'
-                         >
-                            <option value='' disabled>Selecciona un role</option>
-                                {sugesRole.map((exposición) => (
-                                    <option key={exposición.id} value={exposición.presentation}>
-                                        {exposición.presentation}
-                                    </option>
+                            placeholder="escribe la presentacion"
+                            value={values.presentation}
+                            onChange={(e) => {
+                                const val = e.target.value.toUpperCase();
+                                setShowSuggestions(true);
+
+                                setFieltered(
+                                    presentations.filter(p => 
+                                        p.name.toUpperCase().includes(val)));
+                                handleChange({
+                                    target: {name: "presentation", value: val}
+                                });
+                            }}
+                            onBlur={() => {
+                                setTimeout(() => {
+                                   setShowSuggestions(false) 
+                                }, 200);
+                            }}
+                        />
+                        {showSuggestions && filtered.length > 0 && (
+                            <ul className="suggestion-box">
+                                {filtered.map(p => (
+                                    <li
+                                        key={p.id}
+                                        onClick={() => {
+                                            handleChange({
+                                                target: { name: "presentation", value: p.name }
+                                            });
+                                            setShowSuggestions(false);
+                                        }}
+                                    >
+                                        {p.name}
+                                    </li>
                                 ))}
-                        </Field>
+                            </ul>
+                        )} 
                         {touched.presentation && errors.presentation && <div className='styleErrores'>{errors.presentation}</div>}
                     </div>
+
                     <div>
                         <label htmlFor='concentration'>Consentracion</label>
                         <input 
