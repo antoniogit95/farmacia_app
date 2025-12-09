@@ -5,11 +5,13 @@ import axios from 'axios';
 import {ToastContainer, toast } from 'react-toastify';
 
 
-export const FormsAddLote = () => {
+export const FormsAddLote = ({ item }) => {
 
     const personData = localStorage.getItem('user_data');
     const token = JSON.parse(personData).token;
     const endPoint = URL_API_private + "/lote/add"
+
+    if(!item) return <h2 className="stylesH2Subtitule"> Selecciona un producto</h2>
 
     const config = {
         headers: {
@@ -19,44 +21,48 @@ export const FormsAddLote = () => {
 
     return(
         <div className=''>
+            <h2 className="stylesH2Subtitule">Agregar stock de productos</h2>
+            <p>{item.genericName} {item.consentration} {item.laboratory}</p>
+
             <Formik
                 initialValues={{
-                    medicament: '',
+                    unitPrice: '',
                     numberLote: '',
                     expirationTime: '',
+                    quantity:'',
                 }}
 
                 validate={async (valores) => {
                     let errores = {};
 
-                    //validacion medicament
-                    if(!valores.medicament){
-                        errores.medicament = 'el campo nombre generico es requerido obligatoriamente';
+                    //validacion precio Unitario
+                    if(!valores.unitPrice){
+                        errores.unitPrice = 'el campo precio Unitario es requerido obligatoriamente';
                     }
 
-                    //validacion para numberLote
-                    if(!valores.numberLote){
-                        errores.numberLote = 'el campo nombre comercial es requerido obligatoriamente';
+                    //validacion para quantity
+                    if(!valores.quantity){
+                        errores.quantity = 'el campo cantidad es requerido obligatoriamente';
                     }
 
                     //validacion expirationTime
                     if(!valores.expirationTime){
-                        errores.expirationTime = 'el campo descripcion es requerido obligatoriamente';
+                        errores.expirationTime = 'el campo fecha de expiracion es requerido obligatoriamente';
                     }
 
                     return errores;
                 }}
-                onSubmit={ (valores) => {
+                onSubmit={ (valores, {resetForm}) => {
                     const store = async (e) => {
-                        console.log(valores)
-                        console.log("end point: "+endPoint)
-                        console.log(config.headers)
+                        console.log(valores, item)
                         e.preventDefault()
                         try {
                             const response = await axios.post(endPoint, {
-                                medicament: valores.medicament,
+                                medicamentId: item.id,
                                 lotNomber: valores.numberLote,
                                 expirationTime: valores.expirationTime,
+                                unitPrice: valores.unitPrice,
+                                quantity: valores.quantity,
                         },{
                             headers: config.headers,
                         });
@@ -64,10 +70,9 @@ export const FormsAddLote = () => {
                                 position: 'top-right',
                                 autoClose: 3000,      
                             });
-                            navigate('/login');  
+                            resetForm();  
                         } catch (error) {
                             console.log(error)
-                            console.log("mensaje")
                             toast.error(error.code, {
                                 position: 'top-right', 
                                 autoClose: 3000,  
@@ -84,47 +89,61 @@ export const FormsAddLote = () => {
                     <form onSubmit={handleSubmit}>
                     
                     <div>
-                        <label htmlFor='medicament'>Medicamento</label>
+                        <label htmlFor='numberLote'>Numero de Lote</label>
                         <input 
                             className='stylesInput'
                             type='text'
-                            id='medicament'
-                            name='medicament'
-                            placeholder='Escribe tu nombre del medicamento'
-                            value={values.medicament}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                        />
-                        {touched.medicament && errors.medicament && <div className='styleErrores'>{errors.medicament}</div>}
-                    </div>
-                    <div>
-                        <label htmlFor='numberLote'>Numero de lote</label>
-                        <input 
-                            className='stylesInput'
-                            type='text'
-                            id='numberLote'    
+                            id='numberLote'
                             name='numberLote'
-                            placeholder='Escribe una pequenia descripcion'
+                            placeholder='Escribe el numero de lote'
                             value={values.numberLote}
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
                         {touched.numberLote && errors.numberLote && <div className='styleErrores'>{errors.numberLote}</div>}
                     </div>
-                    
                     <div>
-                        <label htmlFor='expirationTime'>fecha de expiracion</label>
+                        <label htmlFor='expirationTime'>Fecha de expiracion</label>
                         <input 
                             className='stylesInput'
                             type='date'
-                            id='expirationTime'
+                            id='expirationTime'    
                             name='expirationTime'
-                            placeholder='Escribe tu laboratorio'
+                            placeholder='Escribe una pequenia descripcion'
                             value={values.expirationTime}
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
                         {touched.expirationTime && errors.expirationTime && <div className='styleErrores'>{errors.expirationTime}</div>}
+                    </div>
+                    
+                    <div>
+                        <label htmlFor='quantity'>Cantidad</label>
+                        <input 
+                            className='stylesInput'
+                            type='number'
+                            id='quantity'
+                            name='quantity'
+                            placeholder='Escribe tu laboratorio'
+                            value={values.quantity}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+                        {touched.quantity && errors.quantity && <div className='styleErrores'>{errors.quantity}</div>}
+                    </div>
+                    <div>
+                        <label htmlFor='unitPrice'>Precio Unitario</label>
+                        <input 
+                            className='stylesInput'
+                            type='number'
+                            id='unitPrice'
+                            name='unitPrice'
+                            placeholder='Escribe tu laboratorio'
+                            value={values.unitPrice}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+                        {touched.unitPrice && errors.unitPrice && <div className='styleErrores'>{errors.unitPrice}</div>}
                     </div>
                     <br></br>
                     <div className="stylesContenedorButton">

@@ -1,8 +1,7 @@
 package farmacia.backend.lote;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import org.hibernate.annotations.ManyToAny;
 
 import farmacia.backend.medicament.Medicament;
 import jakarta.persistence.Entity;
@@ -29,8 +28,12 @@ public class Lote {
     @ManyToOne
     @JoinColumn (name = "id_medicament", referencedColumnName = "id")
     private Medicament medicament;
+
     private String lotNomber;
-    private LocalDateTime expirationTime;
+    private LocalDate expirationTime;
+    private int quantity;
+    private Double unitPrice;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     

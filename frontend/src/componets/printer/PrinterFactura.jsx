@@ -55,7 +55,7 @@ export default function PrintFile({ items }) {
         total += final;
 
         doc.setFontSize(10);
-        doc.text(`${item.product}`, 5, y);
+        doc.text(`${item.comercialName}`, 5, y);
         y += 4;
 
         doc.text(

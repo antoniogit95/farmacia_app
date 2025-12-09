@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { URL_API_private } from "../../../providerContext/EndPoint";
+import "./SearchMedicament.css"
 
 export const SearchMedicament = ({ onSelect }) =>{
 
@@ -13,6 +14,7 @@ export const SearchMedicament = ({ onSelect }) =>{
         const fectshMedicament = async () => {
             const response = await axios.get(endPoint, config);
             setData(response.data);
+            console.log(response.data)
         }
         fectshMedicament();
     }, [])
@@ -28,18 +30,20 @@ export const SearchMedicament = ({ onSelect }) =>{
     );
 
     return(<>
-        <div>
-            <h2>buscar medicamento</h2>
+        <div className="">
+            <h2 className="stylesH2Subtitule">Buscar medicamento</h2>
+            <label > Ingrese nombre del medicamento</label>
             <input 
+                className="stylesInput"
                 type = "text"
                 placeholder = "buscar por nombre comun o general"
                 value = {query}
                 onChange = {(e) => setQuery(e.target.value)}
             />
-            <ul>
+            <ul className="styleSearchResult">
                 {filtered.map((m) => (
-                    <li key={m.id} onClick={() => onSelect(m)}>
-                        {m.genericName} - {m.comercialName}-{m.concentration} - {m.laboratory} 
+                    <li className="styleSearchItem" key={m.id} onClick={() => onSelect(m)}>
+                        {m.genericName} - {m.comercialName}-{m.consetration} - {m.laboratory} 
                     </li>
                 ))}
             </ul>

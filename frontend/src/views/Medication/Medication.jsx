@@ -19,15 +19,17 @@ export const Medication = () => {
     return (<>
         <NavBar/>
         <div className="stylesContentMedicament"> 
-            <Ventas></Ventas>
-            <div>
-                <SearchMedicament onSelect={setSelectItem}/>
-            </div>
-            <div>
-                <SelectMedicament item={selectItem} onAdd={addToCar}/>
-            </div>
-            <div>
-                <Shopping cart={cart}/>
+            {/**<Ventas></Ventas> */}
+            <div className="styleContentMedicament-thre ">
+                <div className="styleWindowsColumn">
+                    <SearchMedicament onSelect={setSelectItem}/>
+                </div>
+                <div className="styleWindowsColumn">
+                    <SelectMedicament item={selectItem} onAdd={addToCar}/>
+                </div>
+                <div className="styleWindowsColumn">
+                    <Shopping cart={cart}/>
+                </div>
             </div>
         </div>
     </>);

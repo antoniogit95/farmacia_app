@@ -75,17 +75,16 @@ export const FormsAddMedication = () => {
                 }}
                 onSubmit={ (valores, {resetForm}) => {
                     const store = async (e) => {
-                        console.log(valores)
-                        console.log("end point: "+endPoint)
-                        console.log(config.headers)
                         e.preventDefault()
                         try {
                             const response = await axios.post(endPoint, {
                                 genericName: valores.genericName,
                                 comercialName: valores.comercialName,
                                 descrption: valores.descrption,
+                                consetration: valores.concentration,
+                                pharmaceForm: valores.farmaciForm,
                                 presentation: valores.presentation,
-                                laboratory: valores.laboratory
+                                laboratory: valores.laboratory,
                         },{
                             headers: config.headers,
                         });

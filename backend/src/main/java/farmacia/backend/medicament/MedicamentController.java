@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 
@@ -20,12 +22,16 @@ public class MedicamentController {
 
     @PostMapping("/add")
     public ResponseEntity<String> addMedicament(@RequestBody MedicamentRequest medicament){        
-        System.out.println("llego aqui");
         return mService.addMedicament(medicament);
     }
 
     @GetMapping("/list")
     public ResponseEntity<List<Medicament>> getAllMedicament(){
         return mService.getAllMedicaments();
+    }
+
+    @PostMapping("/savefile")
+    public ResponseEntity<String> addAllMedicament(@RequestParam("file") MultipartFile file){
+        return mService.addfileMedicament(file);
     }
 }

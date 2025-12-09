@@ -1,15 +1,29 @@
 
 .stylesContentMedicament {
   position: relative;
-  padding: 15px;
-  width: 100%;
   height: 100%;
-  top: 60px;
+  width: 100%;
+  top: 67px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   overflow: auto;
   box-sizing: border-box;
+  padding: 15;
 }
 
+.styleContentMedicament-thre {
+  display: grid;
+  width: 97%;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 20px;
+}
+
+.styleWindowsColumn{
+  background: #d0fdd7;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
