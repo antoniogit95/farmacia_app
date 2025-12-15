@@ -10,6 +10,7 @@ export const SelectMedicament = ({item, onAdd}) => {
     const [quantity, setQuantity] = useState(1);
     const [price, setPrice] = useState(0.0);
     const [discount, setDiscount] = useState(0.0);
+    const loteId = selectedLote.id;
     
     const token = JSON.parse(localStorage.getItem('user_data')).token;
 
@@ -25,8 +26,14 @@ export const SelectMedicament = ({item, onAdd}) => {
                 const response = await axios.get(endPoint + item.id, {
                     headers: config.headers,
                 });
-                console.log(response);
-                setLotes(response.data);  
+                
+                setLotes(response.data);
+                if (response.data.length === 1) {
+                    const unico = response.data[0];
+                    setSelectedLote(unico);
+                    setPrice(unico.unitPrice);
+                }
+
             } catch (err) {
                 console.error("Error cargando lotes:", err);
             }
@@ -42,6 +49,8 @@ export const SelectMedicament = ({item, onAdd}) => {
     }
 
     const handleSelectLote = (loteId) => {
+        console.log(lotes);
+        console.log("Ide de lote a buscar"+loteId);
         const lote = lotes.find(l => l.id === parseInt(loteId));
         setSelectedLote(lote);
 
@@ -51,30 +60,45 @@ export const SelectMedicament = ({item, onAdd}) => {
 
     if(!item) return <h2 className="stylesH2Subtitule"> Selecciona un producto</h2>
 
+    const renderLotesSection = () => {
+        console.log(lotes);
+        if (lotes.length === 0){
+            return  (
+                <p style={{color: "red"}}>⚠ No hay stock disponible</p>
+            );
+        }
+        if (lotes.length === 1){
+            return (<>
+                Lote: {lotes[0].lotNomber} — Vence: {lotes[0].expirationTime} — Stock: {lotes[0].quantity}
+            </>);
+        }
+        
+        return (
+            <div>
+                <label>Lotes disponibles</label>
+                <select
+                    className="stylesInput"
+                    onChange={(e) => handleSelectLote(e.target.value)}
+                >
+                    <option value="">Seleccionar lote</option>
+                    {lotes.map(l => (
+                        <option key={l.id} value={l.id}>
+                            Lote: {l.lotNomber} — Vence: {l.expirationTime} — Stock: {l.quantity}
+                        </option>
+                    ))}
+                </select>
+            </div>
+        );
+    }
     const total = (quantity * price) * (1 -discount/100);
 
     return (<>
         <div>
             <h2 className="stylesH2Subtitule">Medicamento seleccionado</h2>
-            <p>{item.genericName} {item.consentration} {item.laboratory}</p>
-
-            <h3 className="stylesH2Subtitule">Lotes Disponibles</h3>
+            <p>{item.genericName} {item.consetration} {item.laboratory}</p>
             
-             {lotes.length > 0 ? (
-                <div>
-                    <label>Lotes disponibles</label>
-                    <select className="stylesInput" onChange={(e) => handleSelectLote(e.target.value)}>
-                        <option value="">Seleccionar lote</option>
-                        {lotes.map(l => (
-                            <option key={l.id} value={l.id}>
-                                Lote: {l.lotNomber} — Vence: {l.expirationTime} — Stock: {l.quantity}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            ) : (
-                <p style={{color: "red"}}>⚠ No hay stock disponible</p>
-            )}
+            {renderLotesSection()}
+
             <div>
                 <label>Precio</label>
                 <input 
@@ -104,7 +128,7 @@ export const SelectMedicament = ({item, onAdd}) => {
             </div>
             <p>total: {total.toFixed(2)}</p>
             <div className="stylesContenedorButton">
-                <button className='stylesButoon' onClick={() => onAdd({ ...item, quantity, price, discount, total})}>
+                <button className='stylesButoon' onClick={() => onAdd({ ...item, quantity, price, discount, total, loteId})}>
                 Agregarl al carrito
             </button>
             </div>

@@ -51,4 +51,15 @@ public class LoteService {
         List<Lote> response = loteRepository.findAllByMedicament(medicamentId);
         return response;
     }
+
+    public Lote getLotebyId(Long id){
+        Optional<Lote> loteOptional = loteRepository.findById(id); 
+        return loteOptional.isPresent()? loteOptional.get() : null; 
+    }
+
+    public void addVenta(Lote lote, int quantity){
+        lote.setQuantity(lote.getQuantity() - quantity);
+        lote.setUpdatedAt(LocalDateTime.now());
+        loteRepository.save(lote);
+    }
 }
