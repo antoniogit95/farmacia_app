@@ -1,6 +1,8 @@
 import { Modal } from 'react-bootstrap';
 import './ModalUserMenu.css';
 import { FaUserCircle } from "react-icons/fa"
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 export const ModalsUserMenu = ({ onVerUsuario, onEditarUsuario, onChangeUsuario, onCerrarSesion, show, onHide }) => {
   return (
@@ -14,7 +16,7 @@ export const ModalsUserMenu = ({ onVerUsuario, onEditarUsuario, onChangeUsuario,
             <FaUserCircle className="styleIconUserMenu"/>
           </div>
           <div className='styleContentButoon'>
-            <div className='stylesLinkMenuUser' typeof='button' onClick={onVerUsuario}>
+            <div className='stylesLinkMenuUser' type='button' onClick={onVerUsuario}>
               <p>Ver Usuario</p>
             </div>
           </div>
@@ -28,7 +30,7 @@ export const ModalsUserMenu = ({ onVerUsuario, onEditarUsuario, onChangeUsuario,
               <p>Cambiar Usuario</p>
             </div>
           </div>
-          <button className='stylesButoon' onClick={onCerrarSesion} block>
+          <button className='stylesButoon' onClick={onCerrarSesion} >
             Cerrar Sesión
           </button>
         </div>

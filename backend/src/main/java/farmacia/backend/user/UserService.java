@@ -1,7 +1,9 @@
 package farmacia.backend.user;
 
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -15,5 +17,10 @@ public class UserService {
     public User getUserbyId(Long Id){
         Optional<User> userOptional = userRepository.findById(Id);
         return userOptional.isPresent()? userOptional.get() : null;
+    }
+
+    public ResponseEntity<List<User>> getAllUsers(){
+        List<User> users = userRepository.findAll();
+        return ResponseEntity.ok(users);
     }
 }

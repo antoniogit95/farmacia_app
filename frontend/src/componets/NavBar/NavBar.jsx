@@ -121,7 +121,11 @@ export const NavBar = () => {
 
               {(isAdmin) && ( <li className="stylesLi">
                       <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
-                      to="/reportes">Reportes</NavLink></li>
+                      to="/reports">Reportes</NavLink></li>
+                  )}
+              {(isAdmin) && ( <li className="stylesLi">
+                      <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
+                      to="/settings">Configuracion</NavLink></li>
                   )}
           </ul>
           <div>

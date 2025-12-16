@@ -1,0 +1,13 @@
+.stylesContentPersonal{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    top: 67px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 15;
+}

@@ -1,6 +1,7 @@
 package farmacia.backend.lote;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +44,13 @@ public class LoteService {
     }
 
     public ResponseEntity<List<Lote>> getAllLotesByMedicamentId(Long medicamentId){
-        List<Lote> response = loteRepository.findAllByMedicamentId(medicamentId);
+        List<Lote> lotes = loteRepository.findAllByMedicamentId(medicamentId);
+        List<Lote> response = new ArrayList<>();
+        for (Lote lote : lotes) {
+            if(lote.getQuantity() > 0){
+                response.add(lote);
+            }
+        }
         return ResponseEntity.ok(response);
     }
 

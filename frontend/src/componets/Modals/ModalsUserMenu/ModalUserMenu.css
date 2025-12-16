@@ -17,11 +17,10 @@
 }
 
 .stylesContetMenuUser{
-    width: 100%;
     display: flex;
-    justify-content: center;
     flex-direction: column;
-    background-color: #3A3F49;
+    align-items: center;
+    gap: 12px;
 }
 
 .styleContentButoon{
@@ -30,13 +29,14 @@
 }
 
 .stylesLinkMenuUser{
-    color: #D3D6E0;
+    width: 100%;
     padding: 2px;
-    border-radius: 8px;
+    border: none;
+    background-color: #d0fdd7;
+    border-radius: 12px;
     cursor: pointer;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
+    text-align: center;
+
 }
 
 .stylesLinkMenuUser:hover {
