@@ -1,0 +1,47 @@
+.styleContentTable{
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 15px;
+    overflow: hidden;
+    overflow: auto;
+}
+
+.styleTable {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.stylesHead{
+    width: 100%;
+    background: #2a8c4a;
+    position: sticky;
+    top: 0;
+    text-align: center;
+}
+
+.stylesTh-Td{
+    padding: 8px;
+}
+
+.stylesBody{
+    overflow-y: auto;
+}
+
+.stylesTr{
+    text-align: center;
+    cursor: pointer;
+    transition: .3s;
+} 
+
+.stylesTr:hover{
+    background: #64c27b;
+}
+
+.stylesContentButton-two{
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 5px;
+}

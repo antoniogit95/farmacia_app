@@ -7,11 +7,13 @@ import axios from "axios";
 export const SaveFileMedicament = () => {
     const [file, setFile] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [dragActive, setDragActive] = useState(false);
+
     const endPoint = URL_API_private + "/medicament/savefile";
     const token = JSON.parse(localStorage.getItem('user_data')).token;
 
 
-    const handlefileChange = (e) =>{
+    const handleFileChange = (e) =>{
         const selectedFile = e.target.files[0];
         if(selectedFile && selectedFile.type === "text/csv"){
             setFile(selectedFile);
@@ -20,6 +22,24 @@ export const SaveFileMedicament = () => {
             setFile(null);
         }
     }
+
+    const validateFile = (selected) => {
+        if (!selected) return;
+
+        if (!selected.name.endsWith(".csv")) {
+        toast.error("❌ Solo se permiten archivos .csv");
+        return;
+        }
+
+        setFile(selected);
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setDragActive(false);
+        const droppedFile = e.dataTransfer.files[0];
+        validateFile(droppedFile);
+    };
 
     const config = {
         headers: {
@@ -41,11 +61,11 @@ export const SaveFileMedicament = () => {
 
         try {
             const response = await axios.post(endPoint, formData, config);
-            toast.success("Archivo procesado con exito")
+            toast.success("✅ Archivo procesado con exito")
             console.log(response.data);
         } catch (error) {
             console.error(error);
-            toast.error("error al procesar el archivo")
+            toast.error("❌ Error al procesar el archivo")
         }finally{
             setLoading(false);
         }
@@ -54,22 +74,49 @@ export const SaveFileMedicament = () => {
 
     return(<>
         <div>
-            <h2>Subir medicamentos desde archivo .csv</h2>
-            <label>Formato para agregar los datos</label>
-            <label>Nombre Generico, Nombre Comercial, Descripcion, Consentracion, forma farmaceutica, presentacion, laboratorio</label>
-            <input 
-                className=""
-                type = "file"
-                accept = "csv"
-                onChange={handlefileChange}
-            />
-            <button 
-                className = ""
-                disabled = {loading}
-                onClick={handleUpload}
+            <h2 className="stylesH2Subtitule">Subir medicamentos desde archivo .csv</h2>
+            
+            <p className="stylesformatInfo">
+                Formato:
+                <br />
+                <strong>
+                Nombre genérico, Nombre comercial, Descripción, Concentración,
+                Forma farmacéutica, Presentación, Laboratorio
+                </strong>
+            </p>
+            <div
+                className={dragActive? "stylesDropZoneActive" : "stylesDropZone"}
+                    onDragOver={(e) => {
+                    e.preventDefault();
+                    setDragActive(true);
+                }}
+                onDragLeave={() => setDragActive(false)}
+                onDrop={handleDrop}
             >
-                {loading ? "procesando... " : "subir archivo"}
-            </button>
+                <p>
+                {file
+                    ? `📄 Archivo seleccionado: ${file.name}`
+                    : "Arrastra el archivo aquí o haz clic para seleccionar"}
+                </p>
+
+                <input
+                    type="file"
+                    accept=".csv"
+                    onChange={handleFileChange}
+                    className="file-input"
+                />
+            </div>
+            
+            <div className="">
+                <button 
+                    className = "stylesButoon"
+                    disabled = {loading}
+                    onClick={handleUpload}
+                >
+                    {loading ? "procesando... " : "subir archivo"}
+                </button>
+            </div>
+            
             <ToastContainer/>
         </div>
     </>)

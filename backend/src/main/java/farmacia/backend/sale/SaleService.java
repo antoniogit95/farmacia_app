@@ -1,6 +1,7 @@
 package farmacia.backend.sale;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,5 +63,13 @@ public class SaleService {
         }
 
     }
+
+    public ResponseEntity<List<Sale>> getReportSale(SaleRequestReport report){
+        
+        LocalDateTime start = report.getStart().atStartOfDay();
+        LocalDateTime end = report.getEnd().atTime(23, 59, 59); 
+        List<Sale> sales = saleRepository.findAllByCreatedAtBetween(start, end);
+        return ResponseEntity.ok(sales);    
+    } 
     
 }

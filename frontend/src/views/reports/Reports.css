@@ -11,3 +11,18 @@
     box-sizing: border-box;
     padding: 15;
 }
+
+.styleContentReport-two{
+    display: grid;
+    width: 97%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.styleWindowsColumn{
+    background: #d0fdd7;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}

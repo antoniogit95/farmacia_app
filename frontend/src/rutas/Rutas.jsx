@@ -9,12 +9,14 @@ import { AddStock } from "../views/addStock/AddStock";
 import { Personal } from "../views/personal/Personal";
 import { Reports } from "../views/reports/Reports";
 import { Settings } from "../views/settings/Settings";
+import { ForgottenPassword } from "../views/ForgottenPassword/ForgottenPassword";
 
 export const Rutas = createBrowserRouter([
   
   { path: "/", element: <Login /> },
   { path:'/login', element:<Login /> },
   { path:'/singauth', element:<SingAuth /> },
+  { path:'/forgottenpassword', element:<ForgottenPassword /> },
   { path: "/", element: (<ProtectedRoutes/> ),
     children:[
       { path:'/home', element:<Home/> },

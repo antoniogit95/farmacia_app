@@ -36,31 +36,38 @@ export const TablesPersonal = () => {
 
     return(<>
         <div>
-            <h1>lista del personal</h1>
+            <h2 className="stylesH2Subtitule">lista del personal</h2>
             {loading && (
                         <div className="loading-spinner">
                             <FaSpinner className="spinner-icon" />
                         </div>
                     )}
-            <div>
-                <table>
-                    <thead>
+            <div className="styleContentTable">
+                <table className="styleTable">
+                    <thead className="stylesHead">
                         <tr>
-                            <th>id</th>
-                            <th>nombre</th>
-                            <th>telefono</th>
-                            <th>direccion</th>
-                            <th>usuario</th>
+                            <th className="stylesTh-Td">id</th>
+                            <th className="stylesTh-Td">nombre</th>
+                            <th className="stylesTh-Td">telefono</th>
+                            <th className="stylesTh-Td">direccion</th>
+                            <th className="stylesTh-Td">usuario</th>
+                            <th className="stylesTh-Td">Opciones</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="stylesBody">
                         {personal.map((data) => (<> 
-                            <tr key={data.id}>
-                                <th>{data.username}</th>
-                                <th>{data.person.name}</th>
-                                <th>{data.username}</th>
-                                <th>{data.username}</th>
-                                <th>{data.username}</th>
+                            <tr className="stylesTr" key={data.id}>
+                                <th className="stylesTh-Td">{data.username}</th>
+                                <th className="stylesTh-Td">{data.person.name}</th>
+                                <th className="stylesTh-Td">{data.username}</th>
+                                <th className="stylesTh-Td">{data.username}</th>
+                                <th className="stylesTh-Td">{data.username}</th>
+                                <th>
+                                    <div className="stylesContentButton-two">
+                                        <button className="stylesButoonLogin">editar</button>
+                                        <button className="stylesButoonLogin">borrar</button>
+                                    </div>
+                                </th>
                             </tr>
                         </>
                         ))}

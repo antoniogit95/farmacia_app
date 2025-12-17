@@ -141,8 +141,7 @@ export const Login = () => {
                         </button>
                     </div>
                     <div className="styleLinks">
-                        <NavLink to="/singauth" className="styleLinksA">Crear cuenta</NavLink>
-                        {/** <NavLink to= '/forgenpassword' className="styleLinksA">Olvide mi Contraseña</NavLink>*/}
+                        <NavLink to= '/forgottenpassword' className="styleLinksA">Olvide mi Contraseña</NavLink>
                     </div>
                 </form>
                 )}

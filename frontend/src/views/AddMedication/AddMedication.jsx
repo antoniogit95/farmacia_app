@@ -10,11 +10,13 @@ export const AddMedication = () => {
     return (<>
         <NavBar></NavBar>
         <div className="stylesAddMedicament">
-            <div className="stylesAddMedication">
-                <FormsAddMedication></FormsAddMedication>
-            </div>
-            <div>
-                <SaveFileMedicament/>
+            <div className="stylescontendAddMedicaton-two">
+                <div className="styleWindowsColumn">
+                    <FormsAddMedication></FormsAddMedication>
+                </div>
+                <div className="styleWindowsColumn">
+                    <SaveFileMedicament/>
+                </div>
             </div>
         </div>
     </>);

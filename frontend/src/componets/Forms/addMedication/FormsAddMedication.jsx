@@ -33,6 +33,7 @@ export const FormsAddMedication = () => {
 
     return(
         <div className=''>
+            <h2 className="stylesH2Subtitule">Agregar un medicameto</h2>
             <Formik
                 initialValues={{
                     genericName: '',
