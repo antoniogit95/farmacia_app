@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# certificados
+*.p12
+*.jks
+*.keystore
+
+# carpetas sensibles
+/config/certificados/
