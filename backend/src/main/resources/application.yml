@@ -1,6 +1,6 @@
 server:
   ssl:
     enabled: true
-    key-store: file:certs/slftoken.p12
-    key-store-password: ${SSL_KEYSTORE_PASSWORD}
+    key-store: classpath:certs/softoken.p12
     key-store-type: PKCS12
+    key-store-password: Maria.1983
