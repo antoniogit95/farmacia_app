@@ -1,0 +1,6 @@
+server:
+  ssl:
+    enabled: true
+    key-store: file:certs/slftoken.p12
+    key-store-password: ${SSL_KEYSTORE_PASSWORD}
+    key-store-type: PKCS12
