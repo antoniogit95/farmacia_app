@@ -10,7 +10,9 @@ export const Shopping = ({ cart }) => {
     const [name, setName] = useState("");
     const token = JSON.parse(localStorage.getItem('user_data')).token;
 
-    const endPoint = URL_API_private + "/sale/add";
+    //const endPoint = URL_API_private + "/sale/add";
+
+    const endPoint = URL_API_private + "/firma/factura";
 
     const totalFinal = cart.reduce((acc, item) => acc + parseFloat(item.total), 0);
     const totalDiscount = cart.reduce((acc, item) => acc + parseFloat(item.discount), 0);
