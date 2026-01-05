@@ -13,7 +13,7 @@ public class SaleDetailRequest {
     
     private Long LoteId;
     private int quantity;
-    private double unitPricve;
+    private double unitPrice;
     private double discount;
     private double subTotal;
     

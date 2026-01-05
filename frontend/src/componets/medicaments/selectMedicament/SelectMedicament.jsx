@@ -8,7 +8,7 @@ export const SelectMedicament = ({item, onAdd}) => {
     const [lotes, setLotes] = useState([]);
     const [selectedLote, setSelectedLote] = useState([]);
     const [quantity, setQuantity] = useState(1);
-    const [price, setPrice] = useState(0.0);
+    const [unitPrice, setUnitPrice] = useState(0.0);
     const [discount, setDiscount] = useState(0.0);
     const loteId = selectedLote.id;
     
@@ -31,7 +31,7 @@ export const SelectMedicament = ({item, onAdd}) => {
                 if (response.data.length === 1) {
                     const unico = response.data[0];
                     setSelectedLote(unico);
-                    setPrice(unico.unitPrice);
+                    setUnitPrice(unico.unitPrice);
                 }
 
             } catch (err) {
@@ -54,7 +54,7 @@ export const SelectMedicament = ({item, onAdd}) => {
         const lote = lotes.find(l => l.id === parseInt(loteId));
         setSelectedLote(lote);
 
-        setPrice(lote.unitPrice);
+        setUnitPrice(lote.unitPrice);
         setQuantity(1);
     };
 
@@ -90,7 +90,7 @@ export const SelectMedicament = ({item, onAdd}) => {
             </div>
         );
     }
-    const total = (quantity * price) * (1 -discount/100);
+    const subTotal = (quantity * unitPrice) * (1 -discount/100);
 
     return (<>
         <div>
@@ -104,7 +104,7 @@ export const SelectMedicament = ({item, onAdd}) => {
                 <input 
                     className="stylesInput"
                     type="text"
-                    value={price}
+                    value={unitPrice}
                     //onChange={(e) => setPrice(e.target.value)} 
                 />
             </div>
@@ -126,9 +126,9 @@ export const SelectMedicament = ({item, onAdd}) => {
                 value={discount}
                 onChange={(e) => setDiscount(e.target.value)} />
             </div>
-            <p>total: {total.toFixed(2)}</p>
+            <p>total: {subTotal.toFixed(2)}</p>
             <div className="stylesContenedorButton">
-                <button className='stylesButoon' onClick={() => onAdd({ ...item, quantity, price, discount, total, loteId})}>
+                <button className='stylesButoon' onClick={() => onAdd({ ...item, quantity, unitPrice, discount, subTotal, loteId})}>
                 Agregarl al carrito
             </button>
             </div>

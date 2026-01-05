@@ -1,9 +1,7 @@
-package farmacia.backend.sale.saleDetail;
+package farmacia.backend.company;
 
 import java.time.LocalDateTime;
 
-import farmacia.backend.lote.Lote;
-import farmacia.backend.sale.Sale;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -15,28 +13,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
-public class SaleDetail {
-    
+public class Branch {
     @Id
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinColumn (name = "id_sale", referencedColumnName = "id")
-    private Sale sale;
+    private Integer codigoSucursal; 
+    private String nombre;
+    private String municipio;
+    private String direccion;
+    private Integer codigoPuntoVenta;
+    private String actividadEconomica;
+    private String telefono;
 
     @ManyToOne
-    @JoinColumn (name = "id_Lote", referencedColumnName = "id")
-    private Lote lote;
+    @JoinColumn(name = "company_id")
+    private Company company;
 
-    private int quantity;
-    private double unitPrice;
-    private double discount;
-    private double subTotal;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

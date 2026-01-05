@@ -40,4 +40,19 @@ public class FirmaController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/verificar")
+    public ResponseEntity<?> verificarFirma(@RequestBody FirmaVerificationRequest request) {
+        boolean esValida = signatureService.verificarFirma(
+                request.getFacturaJson(),
+                request.getFirmaDigital(),
+                request.getCertificado()
+        );
+        return ResponseEntity.ok(Map.of(
+                "valida", esValida,
+                "mensaje", esValida
+                        ? "Firma válida y contenido íntegro"
+                        : "Firma inválida o contenido modificado"
+        ));
+    }
 }

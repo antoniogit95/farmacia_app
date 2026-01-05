@@ -26,11 +26,11 @@ public class SaleDetailService {
                     .discount(saleDetailRequest.getDiscount())
                     .quantity(saleDetailRequest.getQuantity())
                     .lote(lote)
+                    .unitPrice(saleDetailRequest.getUnitPrice())
                     .subTotal(saleDetailRequest.getSubTotal())
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
                     .build();
-        saleDetailRepository.save(saleDetail);
-        return saleDetail;
+        return saleDetailRepository.save(saleDetail);
     }
 }

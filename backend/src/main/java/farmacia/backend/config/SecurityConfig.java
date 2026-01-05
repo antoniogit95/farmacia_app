@@ -53,7 +53,8 @@ public class SecurityConfig {
 
         configuration.setAllowedOrigins(List.of(
             "https://localhost:5173",
-            "https://192.168.158.54:5173"
+            "https://192.168.158.54:5173",
+            "https://10.146.253.54:5173"
         ));
 
         configuration.setAllowedMethods(List.of(

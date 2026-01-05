@@ -1,42 +1,45 @@
-package farmacia.backend.sale.saleDetail;
+package farmacia.backend.invoice;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import farmacia.backend.lote.Lote;
-import farmacia.backend.sale.Sale;
+import farmacia.backend.company.Company;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
-public class SaleDetail {
+/**
+ * Cuf --> Codigo Unico de Facturacion Diaria
+ */
+public class cufd {
     
     @Id
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinColumn (name = "id_sale", referencedColumnName = "id")
-    private Sale sale;
+    private String cufd;
+    private String codigoControl;
+
+    private LocalDate fecha;
+    private Integer codigoSucursal;
+    private Integer codigoPuntoVenta;
+
+    private LocalDateTime fechaVigencia;
 
     @ManyToOne
-    @JoinColumn (name = "id_Lote", referencedColumnName = "id")
-    private Lote lote;
+    private Company company;
 
-    private int quantity;
-    private double unitPrice;
-    private double discount;
-    private double subTotal;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

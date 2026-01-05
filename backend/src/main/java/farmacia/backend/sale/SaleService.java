@@ -1,6 +1,7 @@
 package farmacia.backend.sale;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -9,8 +10,12 @@ import org.springframework.stereotype.Service;
 
 import farmacia.backend.client.Client;
 import farmacia.backend.client.ClientService;
+import farmacia.backend.invoice.InvoiceService;
+import farmacia.backend.invoice.invoiceSequence.InvoiceSequenceService;
+import farmacia.backend.sale.saleDetail.SaleDetail;
 import farmacia.backend.sale.saleDetail.SaleDetailRequest;
 import farmacia.backend.sale.saleDetail.SaleDetailService;
+import farmacia.backend.signature.DigitalSignatureService;
 import farmacia.backend.user.User;
 import farmacia.backend.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +28,14 @@ public class SaleService {
     private final ClientService clientService;
     private final UserService userService;
     private final SaleDetailService saleDetailService;
+    private final InvoiceSequenceService invoiceSequenceService;
+    private final InvoiceService invoiceService;
+    private final DigitalSignatureService digitalSignatureService;
+
 
     public ResponseEntity<String> addSale(SaleRequest saleRequest){
         try {
+            Long numFact = invoiceSequenceService.getSequence();
             Client client = clientService.existClientByNit(saleRequest.getClientNit());
             if(client == null){
                 Client newClient = Client.builder()
@@ -53,9 +63,15 @@ public class SaleService {
                 .updatedAt(LocalDateTime.now())
                 .build();
             saleRepository.save(sale);
+            List<SaleDetail> saleDetails = new ArrayList<>();
             for (SaleDetailRequest details : saleRequest.getDetails()) {
-                saleDetailService.save(details, sale);
+                saleDetails.add(saleDetailService.save(details, sale));
             }
+
+            String xml = invoiceService.generarXmlFactura(sale, saleDetails, numFact);
+            System.out.println(xml);
+            String xmlFirmado = digitalSignatureService.firmarXml(xml);
+            System.out.println(xmlFirmado);
             return ResponseEntity.ok(":venta exitosa");
         } catch (Exception e) {
             System.out.println(e);
