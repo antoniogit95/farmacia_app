@@ -1,0 +1,32 @@
+package farmacia.backend.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.ws.client.core.WebServiceTemplate;
+
+@Configuration
+public class SoapConfig {
+        
+    @Bean
+    public Jaxb2Marshaller jaxb2Marshaller() {
+        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+
+        // 👉 ESTE PACKAGE debe coincidir con tus clases JAXB
+        marshaller.setContextPath(
+                "bo/gob/sin/siat/facturacion/sincronizacion/ObjectFactory.java"
+        );
+
+        return marshaller;
+    }
+
+    @Bean
+    public WebServiceTemplate webServiceTemplate(
+            Jaxb2Marshaller marshaller
+    ) {
+        WebServiceTemplate template = new WebServiceTemplate();
+        template.setMarshaller(marshaller);
+        template.setUnmarshaller(marshaller);
+        return template;
+    }
+}
