@@ -12,9 +12,8 @@ public class SoapConfig {
     public Jaxb2Marshaller jaxb2Marshaller() {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
 
-        // 👉 ESTE PACKAGE debe coincidir con tus clases JAXB
         marshaller.setContextPath(
-                "bo/gob/sin/siat/facturacion/sincronizacion/ObjectFactory.java"
+                "bo.gob.sin.siat.facturacion.sincronizacion"
         );
 
         return marshaller;

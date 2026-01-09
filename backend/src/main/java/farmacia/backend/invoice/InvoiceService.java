@@ -19,6 +19,10 @@ import org.w3c.dom.Element;
 import farmacia.backend.company.Branch;
 import farmacia.backend.company.Company;
 import farmacia.backend.company.CompanyService;
+import farmacia.backend.invoice.cufd.Cufd;
+import farmacia.backend.invoice.cufd.CufdService;
+import farmacia.backend.invoice.cuis.CuisRepository;
+import farmacia.backend.invoice.cuis.CuisService;
 import farmacia.backend.sale.Sale;
 import farmacia.backend.sale.saleDetail.SaleDetail;
 import lombok.RequiredArgsConstructor;
@@ -29,12 +33,15 @@ public class InvoiceService {
     
     private final InvoiceRepository invoiceRepository;
     private final CompanyService companyService;
+    private final CufdService cufdService;
 
     public String generarXmlFactura(Sale sale, List<SaleDetail> saleDetail, Long numeroFactura) {
         try {
 
             Company company = companyService.getCompany();
             Branch branch = companyService.getBranch();
+
+            Cufd cufd = cufdService.verificarOCrear(); 
             
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();

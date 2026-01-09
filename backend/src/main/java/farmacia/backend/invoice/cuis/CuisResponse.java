@@ -20,5 +20,6 @@ public class CuisResponse {
     private String fechaVigencia;
     private String codigoControl;
     private String transaccion;
+    private String mensajesList;
     
 }
