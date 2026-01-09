@@ -21,8 +21,6 @@ import farmacia.backend.company.Company;
 import farmacia.backend.company.CompanyService;
 import farmacia.backend.invoice.cufd.Cufd;
 import farmacia.backend.invoice.cufd.CufdService;
-import farmacia.backend.invoice.cuis.CuisRepository;
-import farmacia.backend.invoice.cuis.CuisService;
 import farmacia.backend.sale.Sale;
 import farmacia.backend.sale.saleDetail.SaleDetail;
 import lombok.RequiredArgsConstructor;

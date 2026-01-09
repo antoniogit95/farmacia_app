@@ -158,7 +158,30 @@
 					</excludes>
 				</configuration>
 			</plugin>
-
+			<!--
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxws-maven-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+					<goals>
+						<goal>wsimport</goal>
+					</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<wsdlFiles>
+					<wsdlFile>${project.basedir}/src/main/resources/wsdl/ServicioRecepcionCompras.wsdl</wsdlFile>
+					</wsdlFiles>
+					<packageName>bo.gob.sin.siat.servicio.recepcion.Compras</packageName>
+					<sourceDestDir>${project.basedir}/src/main/java</sourceDestDir>
+					<xnocompile>true</xnocompile>
+					<extension>true</extension>
+					<keep>true</keep>
+				</configuration>
+				</plugin>
+				-->
 		</plugins>
 	</build>
 

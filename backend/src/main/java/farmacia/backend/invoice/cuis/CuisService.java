@@ -27,8 +27,8 @@ public class CuisService {
 
     private Cuis solicitarNuevo() {
         CuisRequest request = CuisRequest.builder()
-                .codigoAmbiente(2) //pruebas
-                .codigoModalidad(1) //electronico en linea 
+                .codigoAmbiente(2) 
+                .codigoModalidad(2)
                 .codigoSistema("226CB438DB87007E2C71E")
                 .codigoSucursal(companyService.getBranch().getCodigoSucursal())
                 .nit(companyService.getCompany().getNit())

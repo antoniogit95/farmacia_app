@@ -30,7 +30,7 @@ public class CufdService {
     private Cufd solicitarNuevo() {
         CufdRequest request = CufdRequest.builder()
                 .codigoAmbiente(2)
-                .codigoModalidad(1)
+                .codigoModalidad(2)
                 .codigoSistema("226CB438DB87007E2C71E")
                 .codigoSucursal(0)
                 .codigoPuntoVenta(0)
