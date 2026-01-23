@@ -11,9 +11,9 @@ export const Reports = () => {
                 <div className="styleWindowsColumn">
                     <TablesReportVentas/>
                 </div>
-                <div className="styleWindowsColumn">
+                {/**<div className="styleWindowsColumn">
                     graficos
-                </div>
+                </div> */}
             </div>
         </div>
     </>)

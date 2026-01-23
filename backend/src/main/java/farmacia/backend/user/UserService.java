@@ -19,6 +19,11 @@ public class UserService {
         return userOptional.isPresent()? userOptional.get() : null;
     }
 
+    public User getUserbyUserName(String name){
+        Optional<User> userOptional = userRepository.findByUsername(name);
+        return userOptional.isPresent()? userOptional.get() : null;
+    }
+
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> users = userRepository.findAll();
         return ResponseEntity.ok(users);

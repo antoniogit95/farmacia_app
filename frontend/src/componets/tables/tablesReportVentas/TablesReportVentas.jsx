@@ -9,6 +9,7 @@ export const TablesReportVentas = () => {
     const [dateFin, setDateFin] = useState("");
     const [datos, setDatos] = useState([]);
     const [loading , setLoading] = useState(false);
+    const [totalVendido, setTotalVendido] = useState (0);
 
     const endPoint = URL_API_private + "/sale/reports"
     const token = JSON.parse(localStorage.getItem('user_data')).token;
@@ -35,8 +36,8 @@ export const TablesReportVentas = () => {
                     },
                     config
             );
-            console.log(response.data);
             setDatos(response.data);
+            generarTotal(response.data);
         } catch (error) {
             console.error("error al cargar: ", error)
             toast.error("error al recuperar los datos")
@@ -45,6 +46,13 @@ export const TablesReportVentas = () => {
         }
     }
 
+    const generarTotal = (ventas) => {
+        const total = ventas.reduce(
+            (acc, venta) => acc + Number(venta.subTotal),
+            0
+        );
+        setTotalVendido(total);
+    };
 
     return(<>
         <h2 className="stylesH2Subtitule">Buscar por interbalo de fechas</h2>
@@ -76,31 +84,39 @@ export const TablesReportVentas = () => {
             ) : datos.length === 0 ? (
                 <p>No hay ventas en este rango</p>
             ) : (
-                <table className="stylesTable">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Factura</th>
-                            <th>Cliente</th>
-                            <th>Total</th>
-                            <th>Descuento</th>
-                            <th>Fecha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {datos.map((v) => (
-                            <tr key={v.id}>
-                                <td>{v.id}</td>
-                                <td>{v.description}</td>
-                                <td>{v.client.companyName}</td>
-                                <td>{v.subTotal.toFixed(2)}</td>
-                                <td>{v.totalDiscount.toFixed(2)}</td>
-                                <td>{new Date(v.updatedAt).toLocaleString()}</td>
+                <div className="styleContentTable">
+                    <table className="styleTable">
+                        <thead className="stylesHead">
+                            <tr>
+                                <th className="stylesTh-Td">ID</th>
+                                <th className="stylesTh-Td">Descripcion</th>
+                                <th className="stylesTh-Td">Cliente</th>
+                                <th className="stylesTh-Td">Total</th>
+                                <th className="stylesTh-Td">Fecha</th>
+                                <th className="stylesTh-Td">Opciones</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {datos.map((v) => (
+                                <tr className="stylesTr" key={v.id}>
+                                    <td className="stylesTh-Td">{v.id}</td>
+                                    <td className="stylesTh-Td">{v.description}</td>
+                                    <td className="stylesTh-Td">{v.client.companyName}</td>
+                                    <td className="stylesTh-Td">{v.subTotal.toFixed(2)} bs</td>
+                                    <td className="stylesTh-Td">{new Date(v.updatedAt).toLocaleString()}</td>
+                                    <div className="stylesContentButtonTable">
+                                        <button className="stylesButoonLogin">Ver detalle</button>
+                                    </div>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
+        </div>
+        <div>
+            <h4>Total Vendido</h4>
+            <strong>{totalVendido.toFixed(2)} bs</strong>
         </div>
         <ToastContainer />
     </>);

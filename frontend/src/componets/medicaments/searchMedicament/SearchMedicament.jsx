@@ -26,7 +26,7 @@ export const SearchMedicament = ({ onSelect }) =>{
     }
 
     const filtered = data.filter((p) =>
-        (p.genericName + p.comercialName).toLowerCase().includes(query.toLowerCase())
+        (p.genericName + p.comercialName +"").toLowerCase().includes(query.toLowerCase())
     );
 
     return(<>
@@ -43,7 +43,10 @@ export const SearchMedicament = ({ onSelect }) =>{
             <ul className="styleSearchResult">
                 {filtered.map((m) => (
                     <li className="styleSearchItem" key={m.id} onClick={() => onSelect(m)}>
-                        {m.genericName} - {m.comercialName}-{m.consetration} - {m.laboratory} 
+                        {m.genericName} - 
+                        {m.comercialName}-
+                        {m.presentation?.name?? "sin Presentacion"}-
+                        {m.consetration} - {m.laboratory} 
                     </li>
                 ))}
             </ul>

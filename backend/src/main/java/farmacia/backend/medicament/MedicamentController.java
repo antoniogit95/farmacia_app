@@ -25,6 +25,11 @@ public class MedicamentController {
         return mService.addMedicament(medicament);
     }
 
+    @PostMapping("/edit")
+    public ResponseEntity<String> editarMedicamento(@RequestBody MedicamentRequest medicament){        
+        return mService.editarMedicamento(medicament);
+    }
+
     @GetMapping("/list")
     public ResponseEntity<List<Medicament>> getAllMedicament(){
         return mService.getAllMedicaments();

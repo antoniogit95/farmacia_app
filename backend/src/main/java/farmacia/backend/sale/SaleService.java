@@ -10,12 +10,9 @@ import org.springframework.stereotype.Service;
 
 import farmacia.backend.client.Client;
 import farmacia.backend.client.ClientService;
-import farmacia.backend.invoice.InvoiceService;
-import farmacia.backend.invoice.invoiceSequence.InvoiceSequenceService;
 import farmacia.backend.sale.saleDetail.SaleDetail;
 import farmacia.backend.sale.saleDetail.SaleDetailRequest;
 import farmacia.backend.sale.saleDetail.SaleDetailService;
-import farmacia.backend.signature.DigitalSignatureService;
 import farmacia.backend.user.User;
 import farmacia.backend.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,30 +25,37 @@ public class SaleService {
     private final ClientService clientService;
     private final UserService userService;
     private final SaleDetailService saleDetailService;
-    private final InvoiceSequenceService invoiceSequenceService;
-    private final InvoiceService invoiceService;
-    private final DigitalSignatureService digitalSignatureService;
 
 
     public ResponseEntity<String> addSale(SaleRequest saleRequest){
         try {
-            Long numFact = invoiceSequenceService.getSequence();
-            Client client = clientService.existClientByNit(saleRequest.getClientNit());
-            if(client == null){
-                Client newClient = Client.builder()
-                    .nit(saleRequest.getClientNit())
-                    .companyName(saleRequest.getClientname())
-                    .createdAt(LocalDateTime.now())
-                    .updatedAt(LocalDateTime.now())
-                    .build();
-                clientService.save(newClient);
-                client = newClient;
+            Client client;
+
+            if(saleRequest.getDetails().size() <= 0){
+                return new ResponseEntity<>("no existe ventas: ", HttpStatus.BAD_REQUEST);
+            }
+
+            if (saleRequest.getClientNit() ==  null || saleRequest.getClientNit() ==  "" ) {
+                client = clientService.existClientByNit("1");
+            } else {
+                client = clientService.existClientByNit(saleRequest.getClientNit());
+                if(client == null){
+                    Client newClient = Client.builder()
+                        .nit(saleRequest.getClientNit())
+                        .companyName(saleRequest.getClientname())
+                        .createdAt(LocalDateTime.now())
+                        .updatedAt(LocalDateTime.now())
+                        .build();
+                    clientService.save(newClient);
+                    client = newClient;
+                }    
             }
             
-            User user = userService.getUserbyId(saleRequest.getUserId());
+            User user = userService.getUserbyUserName(saleRequest.getUserName());
             if(user == null){
-                return new ResponseEntity<>("no existe Usuario con el Id: "+ saleRequest.getUserId(), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("no existe Usuario con el Usuario: "+ saleRequest.getUserName(), HttpStatus.BAD_REQUEST);
             }
+
 
             Sale sale = Sale.builder()
                 .client(client)
@@ -68,10 +72,7 @@ public class SaleService {
                 saleDetails.add(saleDetailService.save(details, sale));
             }
 
-            String xml = invoiceService.generarXmlFactura(sale, saleDetails, numFact);
-            System.out.println(xml);
-            String xmlFirmado = digitalSignatureService.firmarXml(xml);
-            System.out.println(xmlFirmado);
+            System.out.println();
             return ResponseEntity.ok(":venta exitosa");
         } catch (Exception e) {
             System.out.println(e);
@@ -81,7 +82,6 @@ public class SaleService {
     }
 
     public ResponseEntity<List<Sale>> getReportSale(SaleRequestReport report){
-        
         LocalDateTime start = report.getStart().atStartOfDay();
         LocalDateTime end = report.getEnd().atTime(23, 59, 59); 
         List<Sale> sales = saleRepository.findAllByCreatedAtBetween(start, end);

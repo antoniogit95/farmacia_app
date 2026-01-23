@@ -86,7 +86,7 @@ export const NavBar = () => {
                   to="/personal">Personal</NavLink></li>
               )}
 
-              {isAdmin && (
+              {(isAdmin || isPharmacist )&& (
                 <li className="stylesLi submenu-container">
                   <button 
                     className="stylesA submenu-btn"
@@ -119,7 +119,7 @@ export const NavBar = () => {
                 </li>
               )}
 
-              {(isAdmin) && ( <li className="stylesLi">
+              {(isAdmin || isPharmacist) && ( <li className="stylesLi">
                       <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
                       to="/reports">Reportes</NavLink></li>
                   )}

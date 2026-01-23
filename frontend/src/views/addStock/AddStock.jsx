@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { NavBar } from "../../componets/NavBar/NavBar";
 import "./AddStock.css"
-import { SearchMedicament } from "../../componets/medicaments/searchMedicament/SearchMedicament";
-import { FormsAddLote } from "../../componets/Forms/addLote/FormsAddLote";
+import { TablesLote,  } from "../../componets/tables/tablesStock/TablesLote";
 
 export const AddStock = () => {
     const [selectItem, setSelectItem] = useState(null);
@@ -10,6 +9,12 @@ export const AddStock = () => {
     return(<>
         <NavBar/>
         <div className="stylesContentStock">
+
+            <div>
+                <TablesLote/>
+            </div>
+            
+            {/**
             <div className="styleContentStock-two">
                 <div className="styleWindowsColumn">
                     <SearchMedicament onSelect={setSelectItem}/>
@@ -18,7 +23,7 @@ export const AddStock = () => {
                 <div className="styleWindowsColumn">
                     <FormsAddLote item={selectItem}/>
                 </div>
-            </div>
+            </div> */}           
         </div>
     </>);
 }

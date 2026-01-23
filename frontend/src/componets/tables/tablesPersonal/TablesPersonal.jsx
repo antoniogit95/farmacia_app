@@ -57,17 +57,17 @@ export const TablesPersonal = () => {
                     <tbody className="stylesBody">
                         {personal.map((data) => (<> 
                             <tr className="stylesTr" key={data.id}>
-                                <th className="stylesTh-Td">{data.username}</th>
-                                <th className="stylesTh-Td">{data.person.name}</th>
-                                <th className="stylesTh-Td">{data.username}</th>
-                                <th className="stylesTh-Td">{data.username}</th>
-                                <th className="stylesTh-Td">{data.username}</th>
-                                <th>
+                                <td className="stylesTh-Td">{data.username}</td>
+                                <td className="stylesTh-Td">{data.person.name}</td>
+                                <td className="stylesTh-Td">{data.username}</td>
+                                <td className="stylesTh-Td">{data.username}</td>
+                                <td className="stylesTh-Td">{data.username}</td>
+                                <td>
                                     <div className="stylesContentButton-two">
                                         <button className="stylesButoonLogin">editar</button>
                                         <button className="stylesButoonLogin">borrar</button>
                                     </div>
-                                </th>
+                                </td>
                             </tr>
                         </>
                         ))}

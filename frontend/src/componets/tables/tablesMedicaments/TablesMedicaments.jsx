@@ -10,6 +10,9 @@ export const TablesMedicaments = () => {
     const token  = JSON.parse(localStorage.getItem('user_data')).token;
     const endPointMedication = URL_API_private + "/medicament/list"
     const [loading, setLoading] = useState(false);
+    const [search, setSearch] = useState("");
+
+
 
     useEffect(() => {
         getAllDataMedications();
@@ -33,28 +36,49 @@ export const TablesMedicaments = () => {
             setLoading(false)
         }
     }
+
+    const filteredMedicaments = medicamets.filter((m) => {
+        const text = search.toLowerCase();
+        return (
+            m.genericName?.toLowerCase().includes(text) ||
+            m.comercialName?.toLowerCase().includes(text) ||
+            m.description?.toLowerCase().includes(text) ||
+            m.laboratory?.toLowerCase().includes(text)
+        );
+    });
+
     return (<>
-        <h1>lista de medicamentos</h1>
+        <h2 className="stylesH2Subtitule">lista de medicamentos</h2>
         {loading && (
             <div className="loading-spinner">
                 <FaSpinner className="spinner-icon" />
             </div>
         )}
-        <div>
-            <table>
-                <thead>
+        <div className="stylesSearchContainer">
+            <input
+                type="text"
+                className="stylesInput"
+                placeholder="Buscar medicamento..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+            />
+        </div>
+        <div className="styleContentTable">
+            <table className="styleTable">
+                <thead className="stylesHead">
                     <tr>
-                        <th>Nombre Generico</th>
-                        <th>Nombre Comun</th>
-                        <th>Descripcion</th>
-                        <th>Presentacion</th>
-                        <th>Concentracion</th>
-                        <th>Forma farmaceutica</th>
-                        <th>Laboratorio</th>
+                        <th className="stylesTh-Td">Nombre Generico</th>
+                        <th className="stylesTh-Td">Nombre Comun</th>
+                        <th className="stylesTh-Td">Descripcion</th>
+                        <th className="stylesTh-Td">Presentacion</th>
+                        <th className="stylesTh-Td">Concentracion</th>
+                        <th className="stylesTh-Td">Forma farmaceutica</th>
+                        <th className="stylesTh-Td">Laboratorio</th>
+                        <th className="stylesTh-Td"> opciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {medicamets.map((data) => (
+                <tbody className="stylesBody">
+                    {filteredMedicaments.map((data) => (
                         <MedicamentRow 
                             key={data.id}
                             medicament = {data}

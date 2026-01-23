@@ -15,7 +15,6 @@ export const Medication = () => {
         setSelectItem(null);
     }
 
-
     return (<>
         <NavBar/>
         <div className="stylesContentMedicament"> 
@@ -28,7 +27,7 @@ export const Medication = () => {
                     <SelectMedicament item={selectItem} onAdd={addToCar}/>
                 </div>
                 <div className="styleWindowsColumn">
-                    <Shopping cart={cart}/>
+                    <Shopping cart={cart} setCart={setCart}/>
                 </div>
             </div>
         </div>

@@ -69,4 +69,9 @@ public class LoteService {
         lote.setUpdatedAt(LocalDateTime.now());
         loteRepository.save(lote);
     }
+
+    public ResponseEntity<List<Lote>> getAllLotes(){
+        List<Lote> response = loteRepository.findAll();
+        return ResponseEntity.ok(response);
+    }
 }

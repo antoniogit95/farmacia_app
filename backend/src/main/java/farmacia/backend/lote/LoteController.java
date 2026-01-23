@@ -36,4 +36,9 @@ public class LoteController {
     public List<Lote> getallLotesByMedicament(@RequestBody Medicament medicament){
         return loteService.getAllLotesByMedicament(medicament);
     }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<Lote>> getAllLotes(){
+        return loteService.getAllLotes();
+    }
 }

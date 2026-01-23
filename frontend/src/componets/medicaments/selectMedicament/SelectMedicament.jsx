@@ -9,7 +9,8 @@ export const SelectMedicament = ({item, onAdd}) => {
     const [selectedLote, setSelectedLote] = useState([]);
     const [quantity, setQuantity] = useState(1);
     const [unitPrice, setUnitPrice] = useState(0.0);
-    const [discount, setDiscount] = useState(0.0);
+    const [discountPorcentual, setDiscountPorcentual] = useState(0.0);
+    //const [discount, setDiscount] = useState(0.0);
     const loteId = selectedLote.id;
     
     const token = JSON.parse(localStorage.getItem('user_data')).token;
@@ -19,6 +20,11 @@ export const SelectMedicament = ({item, onAdd}) => {
     useEffect(() => {
         if (!item) return;
 
+        setQuantity(1);
+        setDiscountPorcentual(0);
+        setUnitPrice(0);
+        setSelectedLote([]);
+        setLotes([]);
         const fetchLotes = async () => {
             try {
                 console.log(endPoint + item.id);
@@ -90,7 +96,8 @@ export const SelectMedicament = ({item, onAdd}) => {
             </div>
         );
     }
-    const subTotal = (quantity * unitPrice) * (1 -discount/100);
+    const subTotal = (quantity * unitPrice) * (1 -discountPorcentual/100);
+    const discount = (quantity * unitPrice) * (discountPorcentual/100);
 
     return (<>
         <div>
@@ -123,8 +130,8 @@ export const SelectMedicament = ({item, onAdd}) => {
             <input 
                 className="stylesInput"
                 type="text"
-                value={discount}
-                onChange={(e) => setDiscount(e.target.value)} />
+                value={discountPorcentual}
+                onChange={(e) => setDiscountPorcentual(e.target.value)} />
             </div>
             <p>total: {subTotal.toFixed(2)}</p>
             <div className="stylesContenedorButton">

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +61,28 @@ public class MedicamentService {
         } else {
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public ResponseEntity<String> editarMedicamento(MedicamentRequest medicamentRequest){
+        try {
+
+            Optional<Medicament> medicamentOptional = mRepository.findById(medicamentRequest.getId());
+            
+            Medicament medicament= medicamentOptional.get();
+            medicament.setGenericName(medicamentRequest.getGenericName());
+            medicament.setComercialName(medicamentRequest.getComercialName());
+            medicament.setDescrption(medicamentRequest.getDescrption());
+            medicament.setConsetration(medicamentRequest.getConsetration());
+            medicament.setPharmaceForm(medicamentRequest.getPharmaceForm());
+            medicament.setLaboratory(medicamentRequest.getLaboratory());
+            medicament.setPresentation(pService.getAddByName(medicamentRequest.getPresentation()));
+            medicament.setUpdatedAt(LocalDateTime.now());
+            mRepository.save(medicament);
+            return ResponseEntity.ok("Editado con exito");    
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error Inesperado", HttpStatus.BAD_REQUEST);
+        }
+        
     }
 
     public ResponseEntity<String> addfileMedicament(MultipartFile file){

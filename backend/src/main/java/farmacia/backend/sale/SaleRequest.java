@@ -16,9 +16,9 @@ public class SaleRequest {
     
     private String clientNit;
     private String clientname;
-    private Long userId;
-    private String description;
-    private String saleName;
+    private String userName;
+    private String description; //optional
+    private String saleName; //optional
     private double subTotal;
     private double discount;
 

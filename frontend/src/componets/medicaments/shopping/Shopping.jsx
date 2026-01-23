@@ -5,22 +5,41 @@ import { ToastContainer, toast } from "react-toastify";
 import { URL_API_private } from "../../../providerContext/EndPoint";
 import axios from "axios";
 
-export const Shopping = ({ cart }) => {
+export const Shopping = ({ cart , setCart}) => {
     const [nit, setNit] = useState("");
     const [name, setName] = useState("");
-    const token = JSON.parse(localStorage.getItem('user_data')).token;
-
+    const personData = JSON.parse(localStorage.getItem('user_data')); 
+    const token = personData.token;
+    const userName = personData.username;
     const endPoint = URL_API_private + "/sale/add";
 
-    //const endPoint = URL_API_private + "/firma/factura";
 
+    //const endPoint = URL_API_private + "/firma/factura";
+    
     const totalFinal = cart.reduce((acc, item) => acc + parseFloat(item.subTotal), 0);
+
     const totalDiscount = cart.reduce((acc, item) => acc + parseFloat(item.discount), 0);
 
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
         },
+    }
+
+    const generarDescription = () =>{
+         let descripcion = "";
+
+        for (let i = 0; i < cart.length; i++) {
+            const item = cart[i];
+            descripcion += `${item.comercialName} x${item.quantity}`;
+
+            // evitar salto de línea al final
+            if (i < cart.length - 1) {
+                descripcion += "\n";
+            }
+        }
+
+        return descripcion;
     }
 
     const handleClic = () => {
@@ -30,9 +49,9 @@ export const Shopping = ({ cart }) => {
                     {
                         clientNit: nit,
                         clientname: name,
-                        userId: "2",
-                        description: "mensaje desde el front para mostrar",
-                        saleName: "asdasd",
+                        userName: userName,
+                        description: generarDescription(),
+                        saleName: "",
                         subTotal: totalFinal,
                         discount: totalDiscount,
                         details : cart,
@@ -40,11 +59,15 @@ export const Shopping = ({ cart }) => {
                     },
                     config
                 )
-                console.log(response)
+
                 toast.success('pedido con exito', {
                     position: 'top-right',
                     autoClose: 3000,      
                 });
+
+                setCart([]);
+                setNit("");
+                setName("")
             } catch (error) {
                 console.log(error);
                 toast.error('error inesperado', {
@@ -54,7 +77,15 @@ export const Shopping = ({ cart }) => {
             }
         }
         
-        store();
+
+        if (cart.length >  0) {
+            store()
+        } else {
+            toast.error('debe agregar un pedido antes', {
+                position: 'top-right',
+                autoClose: 3000,      
+            });   
+        }
     }
 
     return(<>
