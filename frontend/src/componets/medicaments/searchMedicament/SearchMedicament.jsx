@@ -43,7 +43,7 @@ export const SearchMedicament = ({ onSelect }) =>{
             <ul className="styleSearchResult">
                 {filtered.map((m) => (
                     <li className="styleSearchItem" key={m.id} onClick={() => onSelect(m)}>
-                        {m.genericName} - 
+                        {/**m.genericName*/}  
                         {m.comercialName}-
                         {m.presentation?.name?? "sin Presentacion"}-
                         {m.consetration} - {m.laboratory} 

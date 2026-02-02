@@ -58,6 +58,7 @@ export const AddLoteModal = ({show, onHide, medication}) => {
                             }
                             return errores;
                         }}
+                        
                         onSubmit={ (valores, {resetForm}) => {
                             const store = async (e) => {
                                 e.preventDefault()

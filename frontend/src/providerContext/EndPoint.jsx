@@ -1,4 +1,4 @@
-const canbiar = true //true servidor, false local
+const canbiar = false //true servidor, false local
 
 const LOCAL = "https://localhost:8080";
 //const SERVER = "http://192.168.158.54:8080" 

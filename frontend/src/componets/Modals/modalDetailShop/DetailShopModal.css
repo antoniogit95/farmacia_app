@@ -1,0 +1,8 @@
+.styleTableModal{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.modal-xl {
+    max-width: 80%;
+}

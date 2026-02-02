@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoteRequest {
     
+    private Long id;
     private Long medicamentId;
     private String lotNomber;
     private LocalDate expirationTime;

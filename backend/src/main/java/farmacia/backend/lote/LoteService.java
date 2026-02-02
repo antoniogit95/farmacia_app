@@ -43,6 +43,24 @@ public class LoteService {
         }
     }
 
+    public ResponseEntity<String> editLote(LoteRequest loteRequest){
+        try {
+            Optional<Lote> optional = loteRepository.findById(loteRequest.getId());
+
+            Lote lote= optional.get();
+            lote.setQuantity(loteRequest.getQuantity());
+            lote.setUnitPrice(loteRequest.getUnitPrice());
+            lote.setExpirationTime(loteRequest.getExpirationTime());
+            lote.setUpdatedAt(LocalDateTime.now());
+
+            loteRepository.save(lote);
+
+            return ResponseEntity.ok("exitoso");
+        } catch (Exception e) {
+           return ResponseEntity.badRequest().build();
+        }
+    }
+
     public ResponseEntity<List<Lote>> getAllLotesByMedicamentId(Long medicamentId){
         List<Lote> lotes = loteRepository.findAllByMedicamentId(medicamentId);
         List<Lote> response = new ArrayList<>();

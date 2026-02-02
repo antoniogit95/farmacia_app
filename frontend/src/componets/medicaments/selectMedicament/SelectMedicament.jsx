@@ -3,7 +3,7 @@ import "./SelectMedicament.css"
 import { URL_API_private } from "../../../providerContext/EndPoint";
 import axios from "axios";
 
-export const SelectMedicament = ({item, onAdd}) => {
+export const SelectMedicament = ({item, onAdd, isEditing}) => {
 
     const [lotes, setLotes] = useState([]);
     const [selectedLote, setSelectedLote] = useState([]);
@@ -11,7 +11,9 @@ export const SelectMedicament = ({item, onAdd}) => {
     const [unitPrice, setUnitPrice] = useState(0.0);
     const [discountPorcentual, setDiscountPorcentual] = useState(0.0);
     //const [discount, setDiscount] = useState(0.0);
-    const loteId = selectedLote.id;
+    const loteId = selectedLote.id;    
+    const [error, setError] = useState("");
+
     
     const token = JSON.parse(localStorage.getItem('user_data')).token;
 
@@ -54,7 +56,29 @@ export const SelectMedicament = ({item, onAdd}) => {
         }
     }
 
+    const handleQuantityChange = (e) => {
+
+        const value = Number(e.target.value);
+        const stock = selectedLote?.quantity ?? 0;
+
+        if (value < 0) {
+            setQuantity(1);
+            setError("");
+            return;
+        }
+
+        if (value > stock) {
+            setQuantity(stock);
+            setError(`Stock disponible: ${stock}`);
+            return;
+        }
+
+        setQuantity(value);
+        setError("");
+    };
+
     const handleSelectLote = (loteId) => {
+
         console.log(lotes);
         console.log("Ide de lote a buscar"+loteId);
         const lote = lotes.find(l => l.id === parseInt(loteId));
@@ -117,12 +141,16 @@ export const SelectMedicament = ({item, onAdd}) => {
             </div>
             
             <div>
-                <label>Cantidad</label>
-                <input 
-                    className="stylesInput"
-                    type="number"
-                    value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)} />
+            <label>Cantidad</label>
+            <input
+                className={`stylesInput ${error ? "inputError" : ""}`}
+                type="number"
+                value={quantity}
+                min={1}
+                max={selectedLote?.quantity ?? 1}
+                onChange={handleQuantityChange}
+            />
+            {error && <small className="errorText">{error}</small>}
             </div>
             
             <div>
@@ -135,8 +163,17 @@ export const SelectMedicament = ({item, onAdd}) => {
             </div>
             <p>total: {subTotal.toFixed(2)}</p>
             <div className="stylesContenedorButton">
-                <button className='stylesButoon' onClick={() => onAdd({ ...item, quantity, unitPrice, discount, subTotal, loteId})}>
-                Agregarl al carrito
+                <button 
+                    className='stylesButoon' 
+                    onClick={() => 
+                        onAdd({ 
+                            ...item, 
+                            quantity, 
+                            unitPrice, 
+                            discount, 
+                            subTotal, 
+                            loteId})}>
+                {isEditing ? "Actualizar producto" : "Agregar al carrito"}
             </button>
             </div>
             

@@ -3,6 +3,7 @@ package farmacia.backend.sale;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,5 +88,10 @@ public class SaleService {
         List<Sale> sales = saleRepository.findAllByCreatedAtBetween(start, end);
         return ResponseEntity.ok(sales);    
     } 
+
+    public Sale getSaleById(Long id){
+        Optional<Sale> saleOptional = saleRepository.findById(id);
+        return saleOptional.isPresent()? saleOptional.get() : null ;
+    }
     
 }

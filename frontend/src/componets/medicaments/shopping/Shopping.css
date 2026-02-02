@@ -1,0 +1,32 @@
+.stylesThShopping{
+    padding: 8px;
+    text-align: end;
+}
+
+.btnIcon{
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  font-size: 18px;
+  transition: all 0.2s ease;
+}
+
+.btnIcon.edit{
+  color: #2a8c4a;
+}
+
+.btnIcon.edit:hover{
+  background-color: #e6f4ec;
+  transform: scale(1.1);
+}
+
+.btnIcon.delete{
+  color: #d62828;
+}
+
+.btnIcon.delete:hover{
+  background-color: #fdeaea;
+  transform: scale(1.1);
+}

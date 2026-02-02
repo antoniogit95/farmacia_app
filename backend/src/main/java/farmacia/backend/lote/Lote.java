@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import farmacia.backend.medicament.Medicament;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -29,7 +30,9 @@ public class Lote {
     @JoinColumn (name = "id_medicament", referencedColumnName = "id")
     private Medicament medicament;
 
+    @Column (nullable = false)
     private String lotNomber;
+
     private LocalDate expirationTime;
     private int quantity;
     private Double unitPrice;

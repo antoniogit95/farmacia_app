@@ -25,6 +25,11 @@ public class LoteController {
         return loteService.addLoteByIdMedicament(loteRequest);
     }
 
+    @PostMapping("/edit")
+    public ResponseEntity<String> EditLote(@RequestBody LoteRequest loteRequest){
+        return loteService.editLote(loteRequest);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<List<Lote>> getLotesByMedicamentId(@PathVariable Long id){
 

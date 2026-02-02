@@ -68,7 +68,7 @@ export const TablesMedicaments = () => {
                 <thead className="stylesHead">
                     <tr>
                         <th className="stylesTh-Td">Nombre Generico</th>
-                        <th className="stylesTh-Td">Nombre Comun</th>
+                        <th className="stylesTh-Td">Nombre Comercial</th>
                         <th className="stylesTh-Td">Descripcion</th>
                         <th className="stylesTh-Td">Presentacion</th>
                         <th className="stylesTh-Td">Concentracion</th>

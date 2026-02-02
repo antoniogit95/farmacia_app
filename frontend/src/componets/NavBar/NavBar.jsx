@@ -3,9 +3,9 @@ import "./NavBar.css"
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../providerContext/AuthProvider";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { FaUserCircle } from "react-icons/fa"
-import { ModalsUserMenu } from "../Modals/ModalsUserMenu/ModalUserMenu"
-import logoFarmacia from "../../images/logoFarmacia.png"
+import { FaUserCircle } from "react-icons/fa";
+import { ModalsUserMenu } from "../Modals/ModalsUserMenu/ModalUserMenu";
+import logoFarmacia from "../../images/logoFarmacia.png";
 
 export const NavBar = () => {
     const [showModal, setShowModal] = useState(false);

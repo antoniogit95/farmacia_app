@@ -1,7 +1,10 @@
 package farmacia.backend.sale.saleDetail;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import farmacia.backend.lote.Lote;
@@ -32,5 +35,15 @@ public class SaleDetailService {
                     .updatedAt(LocalDateTime.now())
                     .build();
         return saleDetailRepository.save(saleDetail);
+    }
+
+    public ResponseEntity<List<SaleDetail>> getDetailBySaleId(Long id){
+        try {
+            List<SaleDetail> saleList = saleDetailRepository.findAllBySale_Id(id);
+            return ResponseEntity.ok(saleList);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

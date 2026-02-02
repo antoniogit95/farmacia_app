@@ -3,6 +3,7 @@ import "./TablesLote.css"
 import { URL_API_private } from "../../../providerContext/EndPoint";
 import axios from 'axios';
 import { FaSpinner } from 'react-icons/fa';
+import { EditLoteModal } from "../../Modals/modalEditLote/EditLoteModal";
 
 export const TablesLote = () => {
     const [lotes, setLotes] = useState([]);
@@ -10,8 +11,11 @@ export const TablesLote = () => {
     const endPointLote = URL_API_private + "/lote/list"
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
-
-
+    const [showModal, setShowModal] = useState(false);
+    const [selected, setSelected] = useState([]);
+    const [dateFrom, setDateFrom] = useState("");
+    const [dateTo, setDateTo] = useState("");
+    const [applyDateFilter, setApplyDateFilter] = useState(false);
 
     useEffect(() => {
         getAllDataLote();
@@ -38,15 +42,32 @@ export const TablesLote = () => {
         }
     }
 
-    const filteredMedicaments = lotes.filter((m) => {
-        const text = search.toLowerCase();
-        return (
-            m.genericName?.toLowerCase().includes(text) ||
-            m.comercialName?.toLowerCase().includes(text) ||
-            m.description?.toLowerCase().includes(text) ||
-            m.laboratory?.toLowerCase().includes(text)
+    const filteredMedicaments = lotes
+        .filter((l) => {
+            const text = search.toLowerCase();
+            return l.lotNomber?.toLowerCase().includes(text);
+        })
+        .filter((l) => {
+            if (!applyDateFilter) return true;
+
+            const expDate = new Date(l.expirationTime);
+            const from = dateFrom ? new Date(dateFrom) : null;
+            const to = dateTo ? new Date(dateTo) : null;
+
+            if (from && expDate < from) return false;
+            if (to && expDate > to) return false;
+
+            return true;
+        })
+        .sort(
+            (a, b) =>
+                new Date(a.expirationTime) - new Date(b.expirationTime)
         );
-    });
+
+    const handleClick = (value) => {
+        setSelected(value);
+        setShowModal(true);
+    }
 
     return (<>
         <h2 className="stylesH2Subtitule">lista de Stock o Lotes</h2>
@@ -55,7 +76,8 @@ export const TablesLote = () => {
                 <FaSpinner className="spinner-icon" />
             </div>
         )}
-        <div className="stylesSearchContainer">
+        <div className="stylesSearchContainerHorizontal">
+
             <input
                 type="text"
                 className="stylesInput"
@@ -63,6 +85,39 @@ export const TablesLote = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
             />
+
+            <input
+                type="date"
+                className="stylesInput"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+            />
+
+            <input
+                type="date"
+                className="stylesInput"
+                value={dateTo}
+                onChange={(e) => setDateTo(e.target.value)}
+            />
+            <div className="stylesContentButton-two">
+                <button
+                    className="stylesButoon"
+                    onClick={() => setApplyDateFilter(true)}
+                >
+                    Filtrar
+                </button>
+
+                <button
+                    className="stylesButoon secondary"
+                    onClick={() => {
+                        setDateFrom("");
+                        setDateTo("");
+                        setApplyDateFilter(false);
+                    }}
+                >
+                    Limpiar
+                </button>
+            </div>
         </div>
         <div className="styleContentTable">
             <table className="styleTable">
@@ -77,16 +132,16 @@ export const TablesLote = () => {
                     </tr>
                 </thead>
                 <tbody className="stylesBody">
-                    {lotes.map((lotes) => (<>
-                        <tr className="stylesTr" key={lotes.id}>
-                            <td className="stylesTh-Td">{lotes.lotNomber}</td>
-                            <td className="stylesTh-Td">{lotes.medicament.genericName}</td>
-                            <td className="stylesTh-Td">{lotes.quantity}</td>
-                            <td className="stylesTh-Td">{lotes.unitPrice}</td>
-                            <td className="stylesTh-Td">{lotes.expirationTime}</td>
+                    {filteredMedicaments.map((lote) => (<>
+                        <tr className="stylesTr" key={lote.id}>
+                            <td className="stylesTh-Td">{lote.lotNomber}</td>
+                            <td className="stylesTh-Td">{lote.medicament.comercialName}</td>
+                            <td className="stylesTh-Td">{lote.quantity}</td>
+                            <td className="stylesTh-Td">{lote.unitPrice}</td>
+                            <td className="stylesTh-Td">{lote.expirationTime}</td>
                             <td>
-                                <div className="stylesContentButton">
-                                    <button className="stylesButoonLogin">editar</button>
+                                <div className="stylesContentButtonTable">
+                                    <button className="stylesButoon" onClick={() => handleClick(lote)}>editar</button>
                                 </div>
                             </td>
                         </tr>                       
@@ -94,5 +149,10 @@ export const TablesLote = () => {
                 </tbody>
             </table>
         </div>
+        <EditLoteModal
+            show={showModal}
+            onHide={()=> setShowModal(false)}
+            lote={selected}
+        />
     </>);
 }

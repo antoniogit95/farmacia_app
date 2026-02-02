@@ -1,0 +1,6 @@
+.stylesSearchContainerHorizontal{
+    display: flex;
+    align-self: flex-end;
+    gap: 15px;
+    padding: 10px 15px;
+}

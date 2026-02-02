@@ -3,6 +3,7 @@ import "./TablesReportVentas.css"
 import { URL_API_private } from "../../../providerContext/EndPoint";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
+import { DetailShopModal } from "../../Modals/modalDetailShop/DetailShopModal";
 
 export const TablesReportVentas = () => {
     const [dateInit, setDateInit] = useState("");
@@ -10,6 +11,8 @@ export const TablesReportVentas = () => {
     const [datos, setDatos] = useState([]);
     const [loading , setLoading] = useState(false);
     const [totalVendido, setTotalVendido] = useState (0);
+    const [showModal, setShowModal] = useState(false);
+    const [itemSelect, setItemSelect] = useState([]);
 
     const endPoint = URL_API_private + "/sale/reports"
     const token = JSON.parse(localStorage.getItem('user_data')).token;
@@ -54,6 +57,10 @@ export const TablesReportVentas = () => {
         setTotalVendido(total);
     };
 
+    const handleClickModal = (item) => {
+        setItemSelect(item);
+        setShowModal(true);
+    }
     return(<>
         <h2 className="stylesH2Subtitule">Buscar por interbalo de fechas</h2>
         <div className="stylesContentInput-tre">
@@ -101,12 +108,13 @@ export const TablesReportVentas = () => {
                                 <tr className="stylesTr" key={v.id}>
                                     <td className="stylesTh-Td">{v.id}</td>
                                     <td className="stylesTh-Td">{v.description}</td>
-                                    <td className="stylesTh-Td">{v.client.companyName}</td>
+                                    <td className="stylesTh-Td">{v.client?.companyName}</td>
                                     <td className="stylesTh-Td">{v.subTotal.toFixed(2)} bs</td>
                                     <td className="stylesTh-Td">{new Date(v.updatedAt).toLocaleString()}</td>
                                     <div className="stylesContentButtonTable">
-                                        <button className="stylesButoonLogin">Ver detalle</button>
+                                        <button className="stylesButoonLogin" onClick={() => handleClickModal(v)}>Ver detalle</button>
                                     </div>
+                                    
                                 </tr>
                             ))}
                         </tbody>
@@ -119,5 +127,10 @@ export const TablesReportVentas = () => {
             <strong>{totalVendido.toFixed(2)} bs</strong>
         </div>
         <ToastContainer />
+        <DetailShopModal
+            show={showModal}
+            onHide={() => setShowModal(false)}
+            cart={itemSelect}
+        />
     </>);
 }

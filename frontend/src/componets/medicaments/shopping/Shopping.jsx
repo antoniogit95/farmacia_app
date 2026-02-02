@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import "./Shopping.css"
-import PrintFile from "../../printer/PrinterFactura";
+import { printFactura } from "../../printer/PrinterFactura";
 import { ToastContainer, toast } from "react-toastify";
 import { URL_API_private } from "../../../providerContext/EndPoint";
 import axios from "axios";
+import { FiEdit } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 
-export const Shopping = ({ cart , setCart}) => {
+export const Shopping = ({ cart , setCart, onEdit, onDelete}) => {
     const [nit, setNit] = useState("");
     const [name, setName] = useState("");
     const personData = JSON.parse(localStorage.getItem('user_data')); 
@@ -42,51 +44,48 @@ export const Shopping = ({ cart , setCart}) => {
         return descripcion;
     }
 
-    const handleClic = () => {
-        const store = async () => {
-            try {
-                const response = await axios.post(endPoint,
-                    {
-                        clientNit: nit,
-                        clientname: name,
-                        userName: userName,
-                        description: generarDescription(),
-                        saleName: "",
-                        subTotal: totalFinal,
-                        discount: totalDiscount,
-                        details : cart,
-
-                    },
-                    config
-                )
-
-                toast.success('pedido con exito', {
-                    position: 'top-right',
-                    autoClose: 3000,      
-                });
-
-                setCart([]);
-                setNit("");
-                setName("")
-            } catch (error) {
-                console.log(error);
-                toast.error('error inesperado', {
-                    position: 'top-right',
-                    autoClose: 3000,      
-                });
-            }
-        }
+    const handlePedidoEImpresion = async () => {
         
-
-        if (cart.length >  0) {
-            store()
-        } else {
-            toast.error('debe agregar un pedido antes', {
-                position: 'top-right',
-                autoClose: 3000,      
-            });   
+        if (cart.length === 0) {
+            toast.error("Debe agregar productos", { autoClose: 3000 });
+            return;
         }
-    }
+
+        try {
+            await axios.post(
+            endPoint,
+            {
+                clientNit: nit,
+                clientname: name,
+                userName: userName,
+                description: generarDescription(),
+                saleName: "",
+                subTotal: totalFinal,
+                discount: totalDiscount,
+                details: cart,
+            },
+            config
+            );
+
+            toast.success("Pedido realizado", { autoClose: 2000 });
+
+            // 🔥 IMPRIMIR AUTOMÁTICAMENTE
+            printFactura({
+                items: cart,
+                nit,
+                companyName: name,
+            });
+
+            // limpiar
+            setCart([]);
+            setNit("");
+            setName("");
+
+        } catch (error) {
+            console.error(error);
+            toast.error("Error al realizar pedido");
+        }
+    };
 
     return(<>
         <div>
@@ -111,26 +110,50 @@ export const Shopping = ({ cart , setCart}) => {
                         onChange={(e) => setName(e.target.value)} />
                 </div>
             </div>
-            <ul className="styleSearchResult">
-                {cart.map((i) => (
-                    <li key={i.id}>
-                        nombre: {i.comercialName} | 
-                        cantidad: {i.quantity} unit | 
-                        total descuento: {i.discount} bs | 
-                        total: {i.subTotal.toFixed(2)} bs
-                    </li>
-                ))}
-            </ul>
+            <div className="styleContentTable">
+                <table className="styleTable">
+                    <thead className="stylesHead">
+                        <tr>
+                            <th className="stylesTh-td">Nombre</th>
+                            <th className="stylesTh-td">Cantidad</th>
+                            <th className="stylesTh-td">Descuento</th>
+                            <th className="stylesTh-td">total</th>
+                            <th className="stylesTh-td">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody className="stylesBody">
+                        {cart.map((i, index) => (<>
+                            <tr className="stylesTr" key={index} >
+                                <td className="stylesTh-td">{i.comercialName}</td>
+                                <td className="stylesThShopping">{i.quantity}</td>
+                                <td className="stylesThShopping">{i.discount.toFixed(2)} bs</td>
+                                <td className="stylesThShopping">{i.subTotal.toFixed(2)} bs</td>
+                                <td>
+                                    <div className="stylesContentButton-two">
+                                        <button className="btnIcon edit" onClick={() => onEdit(i, index)}>
+                                            <FiEdit />
+                                        </button>
+
+                                        <button className="btnIcon delete" onClick={() => onDelete(index)}>
+                                            <FiTrash2 />
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </>))}
+                    </tbody>
+                </table>
+            </div>
             
             <h4>Total Descuento: {totalDiscount.toFixed(2)} bs</h4>
             <h3>Sub Total: {totalFinal.toFixed(2)} bs</h3>
 
-            <PrintFile items={cart} />
             <br />
             
             <br />
             <div className="stylesContenedorButton">
-                <button className='stylesButoon' onClick={handleClic}>Realizar pedido</button>  
+                <button className='stylesButoon' onClick={handlePedidoEImpresion}
+                    >Realizar pedido e imprimri</button>  
             </div>
             
         </div>

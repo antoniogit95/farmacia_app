@@ -99,7 +99,8 @@ export const EditMedicationModal = ({show, onHide, medication}) => {
                                         position: 'top-right',
                                         autoClose: 3000,      
                                     });
-                                    resetForm();  
+                                    resetForm();
+                                    onHide();   
                                 } catch (error) {
                                     console.log(error)
                                     console.log("mensaje")

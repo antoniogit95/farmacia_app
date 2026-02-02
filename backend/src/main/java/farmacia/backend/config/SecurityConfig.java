@@ -37,6 +37,15 @@ public class SecurityConfig {
                 auth
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers(
+                        "/",
+                        "/index.html",
+                        "/assets/**",
+                        "/css/**",
+                        "/js/**",
+                        "/favicon.ico"
+                    ).permitAll()
+                    .requestMatchers("/api/**").authenticated()
                     .anyRequest().authenticated()
             )
             .sessionManagement(session ->
