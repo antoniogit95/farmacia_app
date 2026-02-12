@@ -10,6 +10,7 @@ import { Personal } from "../views/personal/Personal";
 import { Reports } from "../views/reports/Reports";
 import { Settings } from "../views/settings/Settings";
 import { ForgottenPassword } from "../views/ForgottenPassword/ForgottenPassword";
+import { AddClient } from "../views/addClient/AddClient";
 
 export const Rutas = createBrowserRouter([
   
@@ -22,6 +23,7 @@ export const Rutas = createBrowserRouter([
       { path:'/home', element:<Home/> },
       { path: '/medication', element:<Medication/>},
       { path: '/addmedication', element: <AddMedication/>},
+      { path: 'addclient', element: <AddClient/>},
       { path: '/addstock', element: <AddStock/>},
       { path: '/personal', element: <Personal/>},
       { path: '/reports', element: <Reports/>},

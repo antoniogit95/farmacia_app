@@ -9,9 +9,6 @@ export const Personal = () => {
 
     const [openModalm, setOpenModal] = useState(false);
 
-    const handleAdd = () => { 
-    }
-
     return (<>
         <NavBar/>
         <div className="stylesContentPersonal">

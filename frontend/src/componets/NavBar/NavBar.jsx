@@ -25,7 +25,7 @@ export const NavBar = () => {
     useEffect(() => {
         // Actualiza la hora cada segundo
         const intervalId = setInterval(() => {
-          setCurrentTime(new Date());
+            setCurrentTime(new Date());
         }, 1000);
     
         // Limpia el intervalo cuando el componente se desmonta
@@ -38,21 +38,21 @@ export const NavBar = () => {
 
 
     const handleVerUsuario = () => {
-      // Lógica para mostrar la información del usuario
-      console.log('Ver Usuario');
-      setShowModal(false);
+        // Lógica para mostrar la información del usuario
+        console.log('Ver Usuario');
+        setShowModal(false);
     };
   
     const handleEditarUsuario = () => {
-      // Lógica para editar el usuario
-      console.log('Editar Usuario');
-      setShowModal(false);
+        // Lógica para editar el usuario
+        console.log('Editar Usuario');
+        setShowModal(false);
     };
   
     const handleChangeUsuario = () => {
-      // Lógica para cambiar de usuario
-      console.log('Cambiar de Usuario');
-      setShowModal(false);
+        // Lógica para cambiar de usuario
+        console.log('Cambiar de Usuario');
+        setShowModal(false);
     };
   
     const handleCerrarSesion = () => {
@@ -74,7 +74,12 @@ export const NavBar = () => {
                   <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
                   to="/home">Home</NavLink></li>
               )}
-              
+
+              {(isAdmin || isPharmacist || isCustomer) && ( <li className="stylesLi">
+                  <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
+                  to="/addclient">Cliente</NavLink></li>
+              )}
+
               {(isAdmin || isPharmacist || isCustomer) && ( <li className="stylesLi">
                   <NavLink className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
                   to="/medication">Ventas</NavLink></li>

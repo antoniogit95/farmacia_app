@@ -1,0 +1,13 @@
+.stylesContentClient {
+  position: relative;
+  padding: 15px;
+  width: 100%;
+  height: 100%;
+  top: 67px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: auto;
+  box-sizing: border-box;
+}
