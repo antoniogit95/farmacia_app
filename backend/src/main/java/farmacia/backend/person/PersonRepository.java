@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface PersonRepository extends JpaRepository<Person, Long>{
     
     Optional<Person> findById(Long id );
+
+    boolean existsByCi(String ci);
+
 }

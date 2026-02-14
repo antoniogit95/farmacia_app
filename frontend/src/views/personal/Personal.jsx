@@ -19,7 +19,6 @@ export const Personal = () => {
         </div>
 
         <PersonalModal
-            onCrear={handleAdd}
             show={openModalm}
             onHide={() => setOpenModal(false)}
         />

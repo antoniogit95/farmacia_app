@@ -8,16 +8,27 @@ import axios from "axios";
 
 export const AddClientModal = ({show, onHide}) => {
 
-    const endPointPrivate = URL_API_private;
-    const endPointPublic = URL_API_public;
+    const endPointPrivate = URL_API_private + '/client/add';
+    const endPointPrivateCi = URL_API_private + '/person';
+    const token  = JSON.parse(localStorage.getItem('user_data')).token;
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
 
     const ExistCi = async (data) => {
         try {
+            const response = await axios.get(
+                `${endPointPrivateCi}/existci?ci=${data}`, config
+            );
+            return response.data; // true o false
+        } catch (error) {
+            console.log(error);
             return false;
-        } catch (e) {
-            return true;
         }
-    }
+    };
 
     return(<>
         <Modal show={show} onHide={onHide} centered>
@@ -32,7 +43,7 @@ export const AddClientModal = ({show, onHide}) => {
                             name: '',
                             surname: '',
                             phone: '', //Opcinal
-                            Notification: 'fasle', // solo si el cliente desee recivir notificaciones
+                            notifications: 'false', // solo si el cliente desee recivir notificaciones
 
                         }}
 
@@ -78,16 +89,19 @@ export const AddClientModal = ({show, onHide}) => {
                                 e.preventDefault()
                                 try {
                                     await axios.post(endPointPrivate, {
-                                        username: values.email,
-                                        password: values.password,
-                                        name: values.nombre,
-                                        surname: values.apellido,
-                                    });
+                                        ci: values.ci,
+                                        name: values.name,
+                                        surname: values.surname,
+                                        telefono: values.phone,
+                                        notifications: values.notifications,
+                                    }, config);
                                     toast.success('Usuario registrado con éxito', {
                                         position: 'top-right',
                                         autoClose: 3000,      
                                     });
-                                    navigate('/login');  
+                                    setTimeout(() => {
+                                        onHide();
+                                    }, 1000); 
                                 } catch (error) {
                                     console.log(error)
                                     console.log("mensaje")
@@ -160,18 +174,24 @@ export const AddClientModal = ({show, onHide}) => {
                                     {touched.phone && errors.phone && <div className="styleErrores">{errors.phone}</div>}
                                 </div>
                                 <div>
-                                    <label htmlFor="Notification"> Desea Recibir notificaciones </label>
-                                    <input
+                                    <label>¿Desea recibir notificaciones?</label>
+
+                                    <select
                                         className="stylesInput"
-                                        type="text"
-                                        id="Notification"
-                                        name="Notification"
-                                        placeholder="Escribe tu numero de Carnet"
-                                        value={values.Notification}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                    />
-                                    {touched.Notification && errors.Notification && <div className="styleErrores">{errors.Notification}</div>}
+                                        name="notifications"
+                                        value={values.notifications}
+                                        onChange={(e) =>
+                                            handleChange({
+                                                target: {
+                                                    name: "notifications",
+                                                    value: e.target.value === "true",
+                                                }
+                                            })
+                                        }
+                                    >
+                                        <option value="false">No</option>
+                                        <option value="true">Sí</option>
+                                    </select>
                                 </div>
                                 <br></br>
                                 <div className="stylesContenedorButton">

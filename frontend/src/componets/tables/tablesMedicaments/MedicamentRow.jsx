@@ -10,8 +10,8 @@ export const MedicamentRow = ({medicament}) => {
     
     return(<>
         <tr className="stylesTr">
-            <td className="stylesTh-Td">{medicament.comercialName}</td>
             <td className="stylesTh-Td">{medicament.genericName}</td>
+            <td className="stylesTh-Td">{medicament.comercialName}</td>
             <td className="stylesTh-Td">{medicament.descrption}</td>
             <td className="stylesTh-Td">{medicament.presentation.name}</td>
             <td className="stylesTh-Td">{medicament.consetration}</td>

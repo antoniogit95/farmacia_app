@@ -2,10 +2,13 @@ package farmacia.backend.client;
 
 import java.time.LocalDateTime;
 
+import farmacia.backend.person.Person;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,9 +28,11 @@ public class Client {
     @Column (unique = true)
     private String nit;
     private String companyName;
+    private boolean notifications;
 
-
-    //private Person person;
+    @OneToOne
+    @JoinColumn (name = "id_person", referencedColumnName = "id")
+    private Person person;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

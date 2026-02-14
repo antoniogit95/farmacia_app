@@ -32,6 +32,7 @@ export const AddLoteModal = ({show, onHide, medication}) => {
                             expirationTime: '',
                             quantity: '',
                             unitPrice:'',
+                            salePrice:''
                         }}
 
                         validate={async (valores) => {
@@ -93,7 +94,7 @@ export const AddLoteModal = ({show, onHide, medication}) => {
                         }}
 
                     >
-                        {({values, errors, touched, handleSubmit, handleChange, handleBlur, resetForm}) => (
+                        {({values, errors, touched, handleSubmit, handleChange, handleBlur, resetForm, setFieldValue}) => (
                             <form onSubmit={handleSubmit}>
                             <div>
                                 <strong>{medication.comercialName + " " + medication.presentation.name + " "+ medication.consetration}</strong>
@@ -136,18 +137,38 @@ export const AddLoteModal = ({show, onHide, medication}) => {
                                 <label htmlFor='unitPrice'>Precio Unitario</label>
                                 <input 
                                     className='stylesInput'
-                                    type='text'
+                                    type='number'
                                     id='unitPrice'    
                                     name='unitPrice'
                                     placeholder='Escribe el precio Unitario'
                                     value={values.unitPrice}
                                     onChange={(e) => {
-                                        e.target.value = e.target.value.toUpperCase();
-                                        handleChange(e);
+                                        const value = parseFloat(e.target.value) || 0;
+
+                                        // Guardar precio de compra
+                                        setFieldValue('unitPrice', value);
+
+                                        // Calcular precio de venta con 30%
+                                        const sale = value * 1.3;
+
+                                        // Redondear a 2 decimales (opcional)
+                                        setFieldValue('salePrice', sale.toFixed(2));
                                     }}
                                     onBlur={handleBlur}
                                 />
                                 {touched.unitPrice && errors.unitPrice && <div className='styleErrores'>{errors.unitPrice}</div>}
+                            </div>
+
+                            <div>
+                                <label htmlFor='salePrice'>Precio de Venta</label>
+                                <input 
+                                    className='stylesInput'
+                                    type='number'
+                                    id='salePrice'    
+                                    name='salePrice'
+                                    placeholder='Escribe el precio Unitario'
+                                    value={values.salePrice}
+                                />
                             </div>
 
                             <div>

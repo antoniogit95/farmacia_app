@@ -4,7 +4,7 @@ import { Modal } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
 import { URL_API_public } from "../../../providerContext/EndPoint";
 import axios from "axios";
-export const PersonalModal = ({ onCrear, show, onHide }) => {
+export const PersonalModal = ({ show, onHide }) => {
 
     const endPoint = URL_API_public+"/register"
     const endPointP = URL_API_public;

@@ -27,11 +27,13 @@ public class Person {
 
     @Column(unique = true)
     private String ci;
+
     private String address;
     private long telefono;
     
     @Column (unique = true)
     private String email;
+    
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
