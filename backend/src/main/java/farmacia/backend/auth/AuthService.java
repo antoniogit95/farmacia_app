@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import farmacia.backend.jwt.JwtService;
 import farmacia.backend.person.Person;
 import farmacia.backend.person.PersonRepository;
+import farmacia.backend.refreshToken.RefreshToken;
+import farmacia.backend.refreshToken.RefreshTokenService;
 import farmacia.backend.sesion.SesionService;
 import farmacia.backend.user.User;
 import farmacia.backend.user.UserRepository;
@@ -27,6 +29,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final SesionService sesionService;
+    private final RefreshTokenService refreshTokenService;
 
     public ResponseEntity<AuthResponse> login(LoginRequest request){
         try {
@@ -38,12 +41,15 @@ public class AuthService {
                 .message("No tienes permisos de autenticación.")
                 .build());
             }
-            String token = jwtService.getToken(user);
+            String token = jwtService.generateAccessToken(user);
+            String refreshToken = jwtService.generateRefreshToken(user);
+            refreshTokenService.createRefreshToken(user, refreshToken);
             sesionService.saveSesion((User) user);
             return ResponseEntity.ok(AuthResponse.builder()
-                .token(token)
+                .accessToken(token)
                 .message("Token con exito")
                 .success(true)
+                .refreshToken(refreshToken)
                 .build());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(AuthResponse.builder()
@@ -74,9 +80,24 @@ public class AuthService {
                 .build();
         userRepository.save(user);
         return AuthResponse.builder()
-                .token(null)
+                .accessToken(null)
                 .message("Usuario creado Satisfactoriamente")
                 .build();
+    }
+
+    public AuthResponse refresh(String refreshTokenStr) {
+        System.out.println("menaje desdel back para ver --> "+refreshTokenStr);
+        RefreshToken refreshToken = refreshTokenService.verifyToken(refreshTokenStr);
+
+        User user = refreshToken.getUser();
+
+        String newAccessToken = jwtService.generateAccessToken(user);
+
+        return AuthResponse.builder()
+            .accessToken(newAccessToken)
+            .message("Token con exito")
+            .success(true)
+            .refreshToken(refreshTokenStr).build();
     }
 
     public LocalDateTime getTimestamp(){

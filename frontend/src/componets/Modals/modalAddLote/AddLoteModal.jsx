@@ -6,11 +6,13 @@ import { URL_API_private, URL_API_public } from "../../../providerContext/EndPoi
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 
-export const AddLoteModal = ({show, onHide, medication}) => {
+export const AddLoteModal = ({show, onHide, medication, onSuccess}) => {
 
     const personData = localStorage.getItem('user_data');
     const endPoint = URL_API_private+"/lote/add";
-    const token = JSON.parse(personData).token;
+    const endPointList = URL_API_private+"/lote";
+    const token = JSON.parse(personData).accessToken;
+    const [lotes, setLotes] = useState([]);
 
     const config = {
         headers: {
@@ -18,7 +20,20 @@ export const AddLoteModal = ({show, onHide, medication}) => {
         },
     };
 
+    useEffect(() => {
+        if (show && medication?.id) {
+            getLotes();
+        }
+    }, [show, medication]);
 
+    const getLotes = async () => {
+        try {
+            const response = await axios.get(`${endPointList}/${medication.id}`, config);
+            setLotes(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
     return(<>
         <Modal show={show} onHide={onHide} centered>
             <Modal.Header closeButton className="modalHeader">
@@ -32,7 +47,8 @@ export const AddLoteModal = ({show, onHide, medication}) => {
                             expirationTime: '',
                             quantity: '',
                             unitPrice:'',
-                            salePrice:''
+                            salePrice:'',
+                            status: 'false'
                         }}
 
                         validate={async (valores) => {
@@ -63,6 +79,7 @@ export const AddLoteModal = ({show, onHide, medication}) => {
                         onSubmit={ (valores, {resetForm}) => {
                             const store = async (e) => {
                                 e.preventDefault()
+                                console.log(valores)
                                 try {
                                     const response = await axios.post(endPoint, {
                                         medicamentId: medication.id,
@@ -70,6 +87,8 @@ export const AddLoteModal = ({show, onHide, medication}) => {
                                         expirationTime: valores.expirationTime,
                                         unitPrice: valores.unitPrice,
                                         quantity: valores.quantity,
+                                        salePrice: valores.salePrice,
+                                        status: valores.status,
                                 },{
                                     headers: config.headers,
                                 });
@@ -77,8 +96,10 @@ export const AddLoteModal = ({show, onHide, medication}) => {
                                         position: 'top-right',
                                         autoClose: 3000,      
                                     });
-                                    resetForm();
-                                    onHide();
+                                    //if (onSuccess) onSuccess();
+                                    setTimeout(() => {
+                                        onHide();
+                                    }, 1000) 
                                 } catch (error) {
                                     console.log(error)
                                     console.log("mensaje")
@@ -98,6 +119,24 @@ export const AddLoteModal = ({show, onHide, medication}) => {
                             <form onSubmit={handleSubmit}>
                             <div>
                                 <strong>{medication.comercialName + " " + medication.presentation.name + " "+ medication.consetration}</strong>
+                            </div>
+                            <div>
+                                {lotes.length > 0 ? (
+                                    <div className="lotesList">
+                                        <strong>Lotes registrados:</strong>
+                                        {lotes.map((lote) => (
+                                            <div key={lote.id} className="loteItem">
+                                                <span><strong>Lote:</strong> {lote.lotNomber}</span>
+                                                <span><strong> Cantidad:</strong> {lote.quantity}</span>
+                                                <span><strong> Expira:</strong> {lote.expirationTime}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="noLotes">
+                                        ⚠️ No hay lotes disponibles para este medicamento
+                                    </div>
+                                )}
                             </div>
                             <div>
                                 <label htmlFor='lotNomber'>Numero de Lote</label>
@@ -185,7 +224,26 @@ export const AddLoteModal = ({show, onHide, medication}) => {
                                 />
                                 {touched.expirationTime && errors.expirationTime && <div className='styleErrores'>{errors.expirationTime}</div>}
                             </div>
-                           
+                            <div>
+                                <label>Tiene Factura?</label>
+
+                                <select
+                                    className="stylesInput"
+                                    name="status"
+                                    value={values.status}
+                                    onChange={(e) =>
+                                        handleChange({
+                                            target: {
+                                                name: "status",
+                                                value: e.target.value === "true",   
+                                            }
+                                        })
+                                    }
+                                >
+                                    <option value="false">No</option>
+                                    <option value="true">Sí</option>
+                                </select>
+                            </div>
                             <br></br>
                             <div className="stylesContenedorButton">
                                 <button  className='stylesButoon' type="submit">

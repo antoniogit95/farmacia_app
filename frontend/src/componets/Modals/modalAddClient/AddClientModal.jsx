@@ -10,7 +10,7 @@ export const AddClientModal = ({show, onHide}) => {
 
     const endPointPrivate = URL_API_private + '/client/add';
     const endPointPrivateCi = URL_API_private + '/person';
-    const token  = JSON.parse(localStorage.getItem('user_data')).token;
+    const token  = JSON.parse(localStorage.getItem('user_data')).accessToken;
 
     const config = {
         headers: {
@@ -126,7 +126,10 @@ export const AddClientModal = ({show, onHide}) => {
                                         name="ci"
                                         placeholder="Escribe tu numero de Carnet"
                                         value={values.ci}
-                                        onChange={handleChange}
+                                        onChange={(e) => {
+                                            e.target.value = e.target.value.toUpperCase();
+                                            handleChange(e);
+                                        }}
                                         onBlur={handleBlur}
                                     />
                                     {touched.ci && errors.ci && <div className="styleErrores">{errors.ci}</div>}
@@ -138,9 +141,12 @@ export const AddClientModal = ({show, onHide}) => {
                                         type="text"
                                         id="name"
                                         name="name"
-                                        placeholder="Escribe tu numero de Carnet"
+                                        placeholder="Escribe su Nombre"
                                         value={values.name}
-                                        onChange={handleChange}
+                                        onChange={(e) => {
+                                            e.target.value = e.target.value.toUpperCase();
+                                            handleChange(e);
+                                        }}
                                         onBlur={handleBlur}
                                     />
                                     {touched.name && errors.name && <div className="styleErrores">{errors.name}</div>}
@@ -152,9 +158,12 @@ export const AddClientModal = ({show, onHide}) => {
                                         type="text"
                                         id="surname"
                                         name="surname"
-                                        placeholder="Escribe tu numero de Carnet"
+                                        placeholder="Escribe sus Apellidos"
                                         value={values.surname}
-                                        onChange={handleChange}
+                                        onChange={(e) => {
+                                            e.target.value = e.target.value.toUpperCase();
+                                            handleChange(e);
+                                        }}
                                         onBlur={handleBlur}
                                     />
                                     {touched.surname && errors.surname && <div className="styleErrores">{errors.surname}</div>}
@@ -163,10 +172,10 @@ export const AddClientModal = ({show, onHide}) => {
                                     <label htmlFor="phone"> Telefono </label>
                                     <input
                                         className="stylesInput"
-                                        type="text"
+                                        type="number"
                                         id="phone"
                                         name="phone"
-                                        placeholder="Escribe tu numero de Carnet"
+                                        placeholder="Escribe su telefono"
                                         value={values.phone}
                                         onChange={handleChange}
                                         onBlur={handleBlur}

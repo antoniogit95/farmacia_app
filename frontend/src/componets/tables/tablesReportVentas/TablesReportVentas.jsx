@@ -15,7 +15,7 @@ export const TablesReportVentas = () => {
     const [itemSelect, setItemSelect] = useState([]);
 
     const endPoint = URL_API_private + "/sale/reports"
-    const token = JSON.parse(localStorage.getItem('user_data')).token;
+    const token = JSON.parse(localStorage.getItem('user_data')).accessToken;
 
 
     const config = {

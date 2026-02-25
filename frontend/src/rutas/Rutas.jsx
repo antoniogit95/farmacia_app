@@ -23,7 +23,7 @@ export const Rutas = createBrowserRouter([
       { path:'/home', element:<Home/> },
       { path: '/medication', element:<Medication/>},
       { path: '/addmedication', element: <AddMedication/>},
-      { path: 'addclient', element: <AddClient/>},
+      { path: '/addclient', element: <AddClient/>},
       { path: '/addstock', element: <AddStock/>},
       { path: '/personal', element: <Personal/>},
       { path: '/reports', element: <Reports/>},

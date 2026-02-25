@@ -33,9 +33,19 @@ public class Lote {
     @Column (nullable = false)
     private String lotNomber;
 
+    @Column (nullable = false)
     private LocalDate expirationTime;
+    
+    @Column (nullable = false)
     private int quantity;
+    
     private Double unitPrice;
+
+    @Column(nullable = false)
+    private boolean status   = false;
+
+    @Column (nullable = false)
+    private Double salePrice;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

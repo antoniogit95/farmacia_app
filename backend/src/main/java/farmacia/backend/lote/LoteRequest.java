@@ -18,5 +18,7 @@ public class LoteRequest {
     private String lotNomber;
     private LocalDate expirationTime;
     private double unitPrice;
+    private Double salePrice;
     private int quantity;
+    private boolean status;
 }

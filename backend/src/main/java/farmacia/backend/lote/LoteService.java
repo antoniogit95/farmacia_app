@@ -31,6 +31,8 @@ public class LoteService {
                         .expirationTime(loteRequest.getExpirationTime())
                         .quantity(loteRequest.getQuantity())
                         .unitPrice(loteRequest.getUnitPrice())
+                        .salePrice(loteRequest.getSalePrice())
+                        .status(loteRequest.isStatus())
                         .createdAt(LocalDateTime.now())
                         .updatedAt(LocalDateTime.now())
                         .build();
@@ -52,7 +54,8 @@ public class LoteService {
             lote.setUnitPrice(loteRequest.getUnitPrice());
             lote.setExpirationTime(loteRequest.getExpirationTime());
             lote.setUpdatedAt(LocalDateTime.now());
-
+            lote.setSalePrice(loteRequest.getSalePrice());
+            lote.setStatus(loteRequest.isStatus());
             loteRepository.save(lote);
 
             return ResponseEntity.ok("exitoso");

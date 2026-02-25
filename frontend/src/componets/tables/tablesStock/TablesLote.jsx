@@ -7,7 +7,7 @@ import { EditLoteModal } from "../../Modals/modalEditLote/EditLoteModal";
 
 export const TablesLote = () => {
     const [lotes, setLotes] = useState([]);
-    const token  = JSON.parse(localStorage.getItem('user_data')).token;
+    const token  = JSON.parse(localStorage.getItem('user_data')).accessToken;
     const endPointLote = URL_API_private + "/lote/list"
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
@@ -126,7 +126,8 @@ export const TablesLote = () => {
                         <th className="stylesTh-Td">Numero de Lote</th>
                         <th className="stylesTh-Td">Medicamento</th>
                         <th className="stylesTh-Td">Cantidad</th>
-                        <th className="stylesTh-Td">Precio</th>
+                        <th className="stylesTh-Td">Precio Venta</th>
+                        <th className="stylesTh-Td">Factura</th>
                         <th className="stylesTh-Td">Fecha Expiracion</th>
                         <th className="stylesTh-Td">Opciones</th>
                     </tr>
@@ -137,7 +138,8 @@ export const TablesLote = () => {
                             <td className="stylesTh-Td">{lote.lotNomber}</td>
                             <td className="stylesTh-Td">{lote.medicament.comercialName}</td>
                             <td className="stylesTh-Td">{lote.quantity}</td>
-                            <td className="stylesTh-Td">{lote.unitPrice}</td>
+                            <td className="stylesTh-Td">{lote.salePrice}</td>
+                            <td className="stylesTh-Td">{lote.status? 'Si':'No'}</td>
                             <td className="stylesTh-Td">{lote.expirationTime}</td>
                             <td>
                                 <div className="stylesContentButtonTable">
@@ -153,6 +155,7 @@ export const TablesLote = () => {
             show={showModal}
             onHide={()=> setShowModal(false)}
             lote={selected}
+            onSuccess={getAllDataLote}
         />
     </>);
 }

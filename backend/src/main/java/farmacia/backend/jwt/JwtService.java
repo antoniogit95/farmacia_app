@@ -6,76 +6,114 @@ import java.util.Map;
 import java.util.function.Function;
 
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import farmacia.backend.user.Role;
 import farmacia.backend.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 
 @Service
 public class JwtService {
-    
-    private static final String SECRET_KEY="gflIYt8y9eWGqNgOtd0GDSW4SV0rzonGqPCz7kEsXuE";
 
-    public String getToken(User user){
-        return getToken(new HashMap<>(), user);
+    private static final String SECRET_KEY = "gflIYt8y9eWGqNgOtd0GDSW4SV0rzonGqPCz7kEsXuE";
+
+    // ================================
+    // GENERAR ACCESS TOKEN (15 min)
+    // ================================
+    public String generateAccessToken(User user) {
+        return generateToken(new HashMap<>(), user, 1000L * 60 * 15); // 15 min
     }
 
-    private String getToken(Map<String, Object> extraClaims, User user){
-        Role role = user.getRole();
-        System.out.println(role);
+    // ================================
+    // GENERAR REFRESH TOKEN (8 horas)
+    // ================================
+    public String generateRefreshToken(User user) {
+        return generateToken(new HashMap<>(), user, 1000L * 60 * 60 * 8); // 8Horas
+    }
+
+    // ================================
+    // GENERAR TOKEN GENERICO
+    // ================================
+    private String generateToken(Map<String, Object> extraClaims, User user, Long expiration) {
+
         return Jwts.builder()
                 .setClaims(extraClaims)
-                .claim("role", role)
+                .claim("role", user.getRole().name()) // mejor guardar string
                 .setSubject(user.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 20))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    private SecretKey getSecretKey(){
-        byte[] keyBytes = SECRET_KEY.getBytes();
-        return new SecretKeySpec(keyBytes, "HmacSHA256"); 
+    // ================================
+    // CLAVE SECRETA (IMPORTANTE)
+    // ================================
+    private SecretKey getSecretKey() {
+        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes()); // mejor que SecretKeySpec
     }
 
+    // ================================
+    // OBTENER USERNAME
+    // ================================
     public String getUsernameFromToken(String token) {
         return getClaim(token, Claims::getSubject);
     }
 
-    
+    // ================================
+    // VALIDAR TOKEN
+    // ================================
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username  = getUsernameFromToken(token);
+        final String username = getUsernameFromToken(token);
+
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
+    // ================================
+    // OBTENER TODOS LOS CLAIMS
+    // ================================
     private Claims getAllClaims(String token){
         return Jwts
             .parser()
-            .setSigningKey(getSecretKey())
+            .verifyWith((SecretKey) getSecretKey())
             .build()
-            .parseClaimsJws(token)
-            .getBody();
-
+            .parseSignedClaims(token)
+            .getPayload();
     }
 
-    public <T> T getClaim(String token, Function<Claims, T> claimsResolver){
+    // ================================
+    // OBTENER CLAIM GENERICO
+    // ================================
+    public <T> T getClaim(String token, Function<Claims, T> resolver) {
         final Claims claims = getAllClaims(token);
-        return claimsResolver.apply(claims);
+        return resolver.apply(claims);
     }
 
-    private Date getExpiration (String token){
+    // ================================
+    // EXPIRACION
+    // ================================
+    public Date getExpiration(String token) {
         return getClaim(token, Claims::getExpiration);
     }
 
-    private boolean isTokenExpired(String token){
+    public boolean isTokenExpired(String token) {
         return getExpiration(token).before(new Date());
     }
 
+    // ================================
+    // VALIDAR SOLO TOKEN (sin userDetails)
+    // ================================
+    public boolean isTokenValid(String token) {
+        try {
+            getAllClaims(token);
+            return !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

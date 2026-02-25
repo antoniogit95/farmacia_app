@@ -8,7 +8,7 @@ export const TablesPersonal = () => {
     const [personal, setPersonal] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const token  = JSON.parse(localStorage.getItem('user_data')).token;
+    const token  = JSON.parse(localStorage.getItem('user_data')).accessToken;
     const endPoint = URL_API_private + "/user/list";
 
 

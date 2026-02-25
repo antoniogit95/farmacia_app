@@ -18,7 +18,7 @@ export const Login = () => {
     const auth = useAuth();
 
     if(auth.isAuthenticated){
-        return <Navigate to="/home" />
+        return <Navigate to="/medication" />
     }
 
     function handleClick (){
@@ -81,9 +81,11 @@ export const Login = () => {
                             username: valores.user,
                             password: valores.pass
                         });
-                        if (response.data.success) {
-                            auth.saveToken(response.data.token);
-                            navigate("/home");
+                        console.log(response.data);
+                        
+                        if (response.data.success){
+                            auth.saveToken(response.data.accessToken, response.data.refreshToken);
+                            navigate("/medication");
                         } else {
                             adminErrros(response.data.message);
                         }

@@ -4,29 +4,57 @@
 }
 
 .btnIcon{
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 6px;
-  font-size: 18px;
-  transition: all 0.2s ease;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    font-size: 18px;
+    transition: all 0.2s ease;
 }
 
 .btnIcon.edit{
-  color: #2a8c4a;
+    color: #2a8c4a;
 }
 
 .btnIcon.edit:hover{
-  background-color: #e6f4ec;
-  transform: scale(1.1);
+    background-color: #e6f4ec;
+    transform: scale(1.1);
 }
 
 .btnIcon.delete{
-  color: #d62828;
+    color: #d62828;
 }
 
 .btnIcon.delete:hover{
-  background-color: #fdeaea;
-  transform: scale(1.1);
+    background-color: #fdeaea;
+    transform: scale(1.1);
+}
+
+.autocomplete-container {
+    position: relative;
+    width: 100%;
+}
+
+.suggestions-list {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 10;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 10px;
+}
+
+.suggestions-list li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestions-list li:hover {
+    background-color: #2a8c4a;
 }

@@ -4,7 +4,7 @@ import { AddMedicationModal } from "../../Modals/modalAddMedication/AddMedicatio
 import { EditMedicationModal } from "../../Modals/modalEditMedication/EditMedicationModal";
 import { AddLoteModal } from "../../Modals/modalAddLote/AddLoteModal";
 
-export const MedicamentRow = ({medicament}) => {
+export const MedicamentRow = ({medicament, onSuccess}) => {
     const [showModalEdit, setShowModalEdit] = useState(false);
     const [showModalLote, setShowModalLote] = useState(false);
     
@@ -27,11 +27,13 @@ export const MedicamentRow = ({medicament}) => {
             show={showModalEdit}
             onHide={() => setShowModalEdit(false)}
             medication={medicament}
+            onSuccess = {onSuccess}
         />
         <AddLoteModal
             show={showModalLote}
             onHide={() => setShowModalLote(false)}
             medication={medicament}
+            onSuccess = {onSuccess}
         />
     </>);
 }

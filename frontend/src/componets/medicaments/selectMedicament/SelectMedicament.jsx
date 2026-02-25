@@ -15,7 +15,7 @@ export const SelectMedicament = ({item, onAdd, isEditing}) => {
     const [error, setError] = useState("");
 
     
-    const token = JSON.parse(localStorage.getItem('user_data')).token;
+    const token = JSON.parse(localStorage.getItem('user_data')).accessToken;
 
     const endPoint = URL_API_private+"/lote/";
 
@@ -39,7 +39,7 @@ export const SelectMedicament = ({item, onAdd, isEditing}) => {
                 if (response.data.length === 1) {
                     const unico = response.data[0];
                     setSelectedLote(unico);
-                    setUnitPrice(unico.unitPrice);
+                    setUnitPrice(unico.salePrice);
                 }
 
             } catch (err) {
@@ -84,7 +84,7 @@ export const SelectMedicament = ({item, onAdd, isEditing}) => {
         const lote = lotes.find(l => l.id === parseInt(loteId));
         setSelectedLote(lote);
 
-        setUnitPrice(lote.unitPrice);
+        setUnitPrice(lote.salePrice);
         setQuantity(1);
     };
 

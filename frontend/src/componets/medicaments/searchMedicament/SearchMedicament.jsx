@@ -8,7 +8,7 @@ export const SearchMedicament = ({ onSelect }) =>{
     const [query, setQuery] = useState("");
     const endPoint = URL_API_private+"/medicament/list";
     const [data, setData] = useState([]);
-    const token  = JSON.parse(localStorage.getItem('user_data')).token;
+    const token  = JSON.parse(localStorage.getItem('user_data')).accessToken;
 
     useEffect(()=>{
         const fectshMedicament = async () => {

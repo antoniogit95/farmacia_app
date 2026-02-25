@@ -6,12 +6,12 @@ import { URL_API_private, URL_API_public } from "../../../providerContext/EndPoi
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 
-export const EditLoteModal = ({show, onHide, lote}) => {
+export const EditLoteModal = ({show, onHide, lote, onSuccess}) => {
 
     
     const userData = JSON.parse(localStorage.getItem("user_data"));
     const endPoint = URL_API_private+"/lote/edit";
-    const token = userData?.token;
+    const token = userData?.accessToken;
     const userRole = userData?.role;
     const isAdmin = userRole === "ADMIN";
 
@@ -51,6 +51,8 @@ export const EditLoteModal = ({show, onHide, lote}) => {
                                 expirationTime: lote.expirationTime,
                                 quantity: lote.quantity,
                                 unitPrice: lote.unitPrice,
+                                salePrice: lote.salePrice,
+                                status: lote.status
                             }}
 
                             validate={async (valores) => {
@@ -89,6 +91,8 @@ export const EditLoteModal = ({show, onHide, lote}) => {
                                             expirationTime: valores.expirationTime,
                                             unitPrice: valores.unitPrice,
                                             quantity: valores.quantity,
+                                            salePrice: valores.salePrice,
+                                            status: valores.status,
                                     },{
                                         headers: config.headers,
                                     });
@@ -96,8 +100,10 @@ export const EditLoteModal = ({show, onHide, lote}) => {
                                             position: 'top-right',
                                             autoClose: 3000,      
                                         });
-                                        resetForm();
-                                        onHide();
+                                        if (onSuccess) onSuccess();
+                                        setTimeout(() => {
+                                            onHide();
+                                        }, 1000)
                                     } catch (error) {
                                         console.log(error)
                                         console.log("mensaje")
@@ -113,7 +119,7 @@ export const EditLoteModal = ({show, onHide, lote}) => {
                             }}
 
                         >
-                            {({values, errors, touched, handleSubmit, handleChange, handleBlur, resetForm}) => (
+                            {({values, errors, touched, handleSubmit, handleChange, handleBlur, setFieldValue}) => (
                                 <form onSubmit={handleSubmit}>
                                 <div>
                                     <strong>{lote.medicament?.comercialName + " " + lote.medicament?.presentation.name + " "+ lote.medicament?.consetration}</strong> 
@@ -162,14 +168,56 @@ export const EditLoteModal = ({show, onHide, lote}) => {
                                         placeholder='Escribe el precio Unitario'
                                         value={values.unitPrice}
                                         onChange={(e) => {
-                                            e.target.value = e.target.value.toUpperCase();
-                                            handleChange(e);
+                                        const value = parseFloat(e.target.value) || 0;
+
+                                        // Guardar precio de compra
+                                        setFieldValue('unitPrice', value);
+
+                                        // Calcular precio de venta con 30%
+                                        const sale = value * 1.3;
+
+                                        // Redondear a 2 decimales (opcional)
+                                        setFieldValue('salePrice', sale.toFixed(2));
                                         }}
                                         onBlur={handleBlur}
                                     />
                                     {touched.unitPrice && errors.unitPrice && <div className='styleErrores'>{errors.unitPrice}</div>}
                                 </div>
+                                
+                            <div>
+                                <label htmlFor='salePrice'>Precio de Venta</label>
+                                <input 
+                                    className='stylesInput'
+                                    type='number'
+                                    id='salePrice'    
+                                    name='salePrice'
+                                    placeholder='Escribe el precio Unitario'
+                                    value={values.salePrice}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                />
+                            </div>
 
+                            <div>
+                                <label>Tiene Factura?</label>
+
+                                <select
+                                    className="stylesInput"
+                                    name="status"
+                                    value={values.status}
+                                    onChange={(e) =>
+                                        handleChange({
+                                            target: {
+                                                name: "status",
+                                                value: e.target.value === "true",   
+                                            }
+                                        })
+                                    }
+                                >
+                                    <option value="false">No</option>
+                                    <option value="true">Sí</option>
+                                </select>
+                            </div>
                                 <div>
                                     <label htmlFor='expirationTime'>Fecha de Expiracion</label>
                                     <input 

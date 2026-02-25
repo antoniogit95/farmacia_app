@@ -1,6 +1,7 @@
 package farmacia.backend.client;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -57,5 +58,10 @@ public class ClientService {
 
     public Client save(Client client){
         return clientRepository.save(client);
+    }
+
+    public ResponseEntity<List<Client>> getAllClient(){
+        return ResponseEntity.ok(clientRepository.findAll());
+
     }
 }

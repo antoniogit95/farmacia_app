@@ -1,5 +1,7 @@
 package farmacia.backend.auth;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,13 @@ public class AuthController {
     @PostMapping(value = "/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request){
         return authService.login(request);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@RequestBody Map<String, String> body) {
+        String refreshToken = body.get("refreshToken");
+        System.out.println("###LLEGO A LA PARTE DE REFRESCAR TOKEN");
+        return ResponseEntity.ok(authService.refresh(refreshToken));
     }
 
     @PostMapping(value = "/register")

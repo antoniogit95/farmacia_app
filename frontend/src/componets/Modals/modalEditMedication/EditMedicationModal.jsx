@@ -6,14 +6,21 @@ import { URL_API_private, URL_API_public } from "../../../providerContext/EndPoi
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 
-export const EditMedicationModal = ({show, onHide, medication}) => {
+export const EditMedicationModal = ({show, onHide, medication, onSuccess}) => {
 
     const personData = localStorage.getItem('user_data');
     const endPoint = URL_API_private+"/medicament/edit";
-    const token = JSON.parse(personData).token;
+    const token = JSON.parse(personData).accessToken;
     const [presentations, setPresentations] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [filtered, setFieltered] = useState([]);
+
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
 
     useEffect(() =>{
         const fetchData = async () => {
@@ -24,13 +31,6 @@ export const EditMedicationModal = ({show, onHide, medication}) => {
         }
         fetchData();
     }, [])
-
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-
 
     return(<>
         <Modal show={show} onHide={onHide} centered>
@@ -79,40 +79,41 @@ export const EditMedicationModal = ({show, onHide, medication}) => {
                             }
                             return errores;
                         }}
-                        onSubmit={ (values, {resetForm}) => {
-                            const store = async (e) => {
-                                e.preventDefault()
-                                const payload = {
-                                    id: medication.id,
-                                    genericName: values.genericName,
-                                    comercialName: values.comercialName,
-                                    descrption: values.descrption,
-                                    consetration: values.concentration,
-                                    pharmaceForm: values.farmaciForm,
-                                    presentation: values.presentation,
-                                    laboratory: values.laboratory
-                                };
+                        onSubmit={ async (values) => {
+                            console.log("submit edit", values);
+                            const payload = {
+                                id: medication.id,
+                                genericName: values.genericName,
+                                comercialName: values.comercialName,
+                                descrption: values.descrption,
+                                consetration: values.concentration,
+                                pharmaceForm: values.farmaciForm,
+                                presentation: values.presentation,
+                                laboratory: values.laboratory
+                            };
 
-                                try {
-                                    const response = await axios.post(endPoint, payload, config);
-                                    toast.success('dato Actualizado con exito', {
-                                        position: 'top-right',
-                                        autoClose: 3000,      
-                                    });
-                                    resetForm();
-                                    onHide();   
-                                } catch (error) {
-                                    console.log(error)
-                                    console.log("mensaje")
-                                    toast.error(error.code, {
-                                        position: 'top-right', 
-                                        autoClose: 3000,  
-                                    });
-                                }
-                                
+                            try {
+                                const response = await axios.post(endPoint, payload, config);
+
+                                toast.success('Dato actualizado con éxito', {
+                                    position: 'top-right',
+                                    autoClose: 3000,
+                                });
+
+                                if (onSuccess) onSuccess();
+
+                                setTimeout(() => {
+                                    onHide();
+                                }, 1500);
+
+                            } catch (error) {
+                                console.log(error);
+
+                                toast.error(error?.response?.data?.message || 'Error al actualizar', {
+                                    position: 'top-right',
+                                    autoClose: 3000,
+                                });
                             }
-                            store(event);
-
                         }}
 
                     >

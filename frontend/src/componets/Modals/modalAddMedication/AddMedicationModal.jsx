@@ -6,15 +6,20 @@ import { URL_API_private, URL_API_public } from "../../../providerContext/EndPoi
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 
-export const AddMedicationModal = ({show, onHide}) => {
+export const AddMedicationModal = ({show, onHide, onSuccess}) => {
 
     const personData = localStorage.getItem('user_data');
     const endPoint = URL_API_private+"/medicament/add";
-    const token = JSON.parse(personData).token;
+    const token = JSON.parse(personData).accessToken;
     const [presentations, setPresentations] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [filtered, setFieltered] = useState([]);
-    const sugesRole = [];
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
 
     useEffect(() =>{
         const fetchData = async () => {
@@ -25,13 +30,6 @@ export const AddMedicationModal = ({show, onHide}) => {
         }
         fetchData();
     }, [])
-
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-
 
     return(<>
         <Modal show={show} onHide={onHide} centered>
@@ -80,38 +78,36 @@ export const AddMedicationModal = ({show, onHide}) => {
                             }
                             return errores;
                         }}
-                        onSubmit={ (valores, {resetForm}) => {
-                            const store = async (e) => {
-                                e.preventDefault()
-                                try {
-                                    const response = await axios.post(endPoint, {
-                                        genericName: valores.genericName,
-                                        comercialName: valores.comercialName,
-                                        descrption: valores.descrption,
-                                        consetration: valores.concentration,
-                                        pharmaceForm: valores.farmaciForm,
-                                        presentation: valores.presentation,
-                                        laboratory: valores.laboratory,
-                                },{
-                                    headers: config.headers,
-                                });
-                                    toast.success('dato guardado con exito', {
-                                        position: 'top-right',
-                                        autoClose: 3000,      
-                                    });
-                                    resetForm();  
-                                } catch (error) {
-                                    console.log(error)
-                                    console.log("mensaje")
-                                    toast.error(error.code, {
-                                        position: 'top-right', 
-                                        autoClose: 3000,  
-                                    });
-                                }
-                                
-                            }
-                            store(event);
+                        
+                        onSubmit={ async (values) => {
+                            try {
+                                const response = await axios.post(endPoint, {
+                                    genericName: values.genericName,
+                                    comercialName: values.comercialName,
+                                    descrption: values.descrption,
+                                    consetration: values.concentration,
+                                    pharmaceForm: values.farmaciForm,
+                                    presentation: values.presentation,
+                                    laboratory: values.laboratory,
+                                }, config);
 
+                                toast.success('Dato guardado con éxito', {
+                                    position: 'top-right',
+                                    autoClose: 3000,
+                                });
+
+                                if (onSuccess) onSuccess();
+
+                                setTimeout(() => {
+                                    onHide();
+                                }, 1000);
+
+                            } catch (error) {
+                                toast.error(error?.response?.data?.message || 'Error', {
+                                    position: 'top-right',
+                                    autoClose: 3000,
+                                });
+                            }
                         }}
 
                     >

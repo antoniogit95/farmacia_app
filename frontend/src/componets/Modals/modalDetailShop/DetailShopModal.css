@@ -6,3 +6,33 @@
 .modal-xl {
     max-width: 80%;
 }
+
+.headerDetailShop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    width: 100%;
+}
+
+.left { 
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.right {
+    display: flex;
+    align-items: center;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: nowrap; 
+}
+
+.row strong,
+.row span {
+    display: inline;     /* 🔥 fuerza inline */
+}

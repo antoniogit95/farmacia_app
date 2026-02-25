@@ -10,7 +10,7 @@ export const AddMedicationBlockModal = ({show, onHide}) => {
 
     const personData = localStorage.getItem('user_data');
     const endPoint = URL_API_private+"/medicament/savefile";
-    const token = JSON.parse(personData).token;
+    const token = JSON.parse(personData).accessToken;
     const [file, setFile] = useState([]);
     const [loading, setLoading] = useState(false);
     const [dragActive, setDragActive] = useState(false);

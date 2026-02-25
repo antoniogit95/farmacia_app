@@ -5,9 +5,9 @@ import axios from 'axios';
 import { MedicamentRow } from "./MedicamentRow";
 import { FaSpinner } from 'react-icons/fa';
 
-export const TablesMedicaments = () => {
+export const TablesMedicaments = ({reload}) => {
     const [medicamets, setMedicaments] = useState([]);
-    const token  = JSON.parse(localStorage.getItem('user_data')).token;
+    const token  = JSON.parse(localStorage.getItem('user_data')).accessToken;
     const endPointMedication = URL_API_private + "/medicament/list"
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
@@ -16,7 +16,7 @@ export const TablesMedicaments = () => {
 
     useEffect(() => {
         getAllDataMedications();
-    }, []);
+    }, [reload]);
 
 
     const config = {
@@ -27,6 +27,7 @@ export const TablesMedicaments = () => {
 
     const getAllDataMedications = async () => {
         setLoading(true);
+        console.log("RESCATANDO DATOS: ")
         try {
             const response = await axios.get(endPointMedication, config);
             setMedicaments(response.data);
@@ -82,6 +83,7 @@ export const TablesMedicaments = () => {
                         <MedicamentRow 
                             key={data.id}
                             medicament = {data}
+                            onSuccess = {getAllDataMedications}
                         />
                     ))}
                 </tbody>

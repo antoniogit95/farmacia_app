@@ -10,7 +10,12 @@ import { AddMedicationBlockModal } from "../../componets/Modals/modalAddMedicame
 export const AddMedication = () => {
 
     const [showModal, setShowModal] = useState(false)
-    const [showModalBlock, setShowModalBlock] = useState(false)
+    const [showModalBlock, setShowModalBlock] = useState(false) 
+    const [reload, setReload] = useState(false)
+
+    const handleReload = () => {
+        setReload(prev => !prev);
+    }
 
     return (<>
         <NavBar></NavBar>
@@ -35,10 +40,12 @@ export const AddMedication = () => {
             <AddMedicationModal
                 show={showModal}
                 onHide={() => setShowModal(false)}
+                onSuccess={handleReload}
             />
             <AddMedicationBlockModal
                 show={showModalBlock}
                 onHide={() => setShowModalBlock(false)}
+                onSuccess={handleReload}
             />
         </div>
     </>);
