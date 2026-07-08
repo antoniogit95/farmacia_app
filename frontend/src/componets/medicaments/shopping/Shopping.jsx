@@ -21,7 +21,7 @@ export const Shopping = ({ cart , setCart, onEdit, onDelete}) => {
     const userName = personData.username;
     const endPoint = URL_API_private + "/sale/add";
     const endPointClient = URL_API_private + "/client/list";
-    const [paymentType, setPaymentType] = useState("EFECTIVO");
+    const [payments, setPayments] = useState([]);
 
 
     //const endPoint = URL_API_private + "/firma/factura";
@@ -29,6 +29,13 @@ export const Shopping = ({ cart , setCart, onEdit, onDelete}) => {
     const totalFinal = cart.reduce((acc, item) => acc + parseFloat(item.subTotal), 0);
 
     const totalDiscount = cart.reduce((acc, item) => acc + parseFloat(item.discount), 0);
+
+    const totalPaid = payments.reduce(
+        (acc, p) => acc + (parseFloat(p.amount) || 0),
+        0
+    );
+
+    const restante = totalFinal - totalPaid;
 
     useEffect(() => {
         loadClients();
@@ -71,7 +78,17 @@ export const Shopping = ({ cart , setCart, onEdit, onDelete}) => {
     const handlePedidoEImpresion = async () => {
         
         if (cart.length === 0) {
-            toast.error("Debe agregar productos", { autoClose: 3000 });
+            toast.error("Debe agregar productos");
+            return;
+        }
+
+        if (payments.length === 0) {
+            toast.error("Debe agregar un metodo de pago");
+            return;
+        }
+
+        if (totalPaid < totalFinal) {
+            toast.error("Falta completar el pago");
             return;
         }
 
@@ -87,6 +104,7 @@ export const Shopping = ({ cart , setCart, onEdit, onDelete}) => {
                 subTotal: totalFinal,
                 discount: totalDiscount,
                 details: cart,
+                payments: pagosAjustados,
             },
             config
             );
@@ -98,6 +116,9 @@ export const Shopping = ({ cart , setCart, onEdit, onDelete}) => {
                 items: cart,
                 nit,
                 companyName: name,
+                payments: ajustarPagos(),
+                total: totalFinal,
+                totalPaid: totalPaid
             });
 
             // limpiar
@@ -136,6 +157,56 @@ export const Shopping = ({ cart , setCart, onEdit, onDelete}) => {
         setSuggestions([]);
         setShowSuggestions(false);
     };
+    
+    const addPayment = () => {
+        setPayments([
+            ...payments,
+            { paymentType: "EFECTIVO", amount: "" }
+        ]);
+    };
+
+    const updatePaymentType = (index, type) => {
+        const updated = [...payments];
+        updated[index].paymentType = type;
+        setPayments(updated);
+    };
+
+    const updateAmount = (index, value) => {
+
+        const updated = [...payments];
+
+        updated[index].amount = value;
+
+        setPayments(updated);
+    };
+
+    const ajustarPagos = () => {
+
+        let restante = totalFinal;
+
+        const pagosAjustados = payments.map(p => {
+
+            let monto = parseFloat(p.amount) || 0;
+
+            if (restante <= 0) {
+                monto = 0;
+            } 
+            else if (monto > restante) {
+                monto = restante;
+            }
+
+            restante -= monto;
+
+            return {
+                paymentType: p.paymentType,
+                amount: monto
+            };
+        });
+
+        return pagosAjustados;
+    };
+
+    const pagosAjustados = ajustarPagos();
 
     return(<>
         <div>
@@ -179,15 +250,39 @@ export const Shopping = ({ cart , setCart, onEdit, onDelete}) => {
                 </div>
             </div>
             <div>
-                <label>Tipo de pago</label>
-                <select 
-                    className="stylesInput"
-                    value={paymentType}
-                    onChange={(e) => setPaymentType(e.target.value)}
-                >
-                    <option value="EFECTIVO">Efectivo</option>
-                    <option value="QR">Pago por QR</option>
-                </select>
+
+                <h3>Metodos de pago</h3>
+
+                <button className="stylesButoon" onClick={addPayment}>
+                    Agregar metodo de pago
+                </button>
+
+                {payments.map((p, index) => (
+
+                <div key={index} className="paymentRow">
+
+                    <select
+                        className="paymentType"
+                        value={p.paymentType}
+                        onChange={(e)=>updatePaymentType(index,e.target.value)}
+                    >
+                        <option value="EFECTIVO">Efectivo</option>
+                        <option value="QR">QR</option>
+                    </select>
+
+                    <input
+                        className="paymentAmount"
+                        type="number"
+                        placeholder="Monto"
+                        value={p.amount}
+                        onChange={(e)=>updateAmount(index,e.target.value)}
+                    />
+
+                </div>
+
+                ))}
+
+                <br />
             </div>
             <div className="styleContentTable">
                 <table className="styleTable">
@@ -226,7 +321,19 @@ export const Shopping = ({ cart , setCart, onEdit, onDelete}) => {
             
             <h4>Total Descuento: {totalDiscount.toFixed(2)} bs</h4>
             <h3>Sub Total: {totalFinal.toFixed(2)} bs</h3>
+            <h4>Total Pagado: {totalPaid.toFixed(2)} bs</h4>
 
+            {restante > 0 && (
+                <h4 style={{color:"red"}}>
+                Falta pagar: {restante.toFixed(2)} bs
+                </h4>
+            )}
+
+            {restante < 0 && (
+                <h4 style={{color:"green"}}>
+                    Cambio: {(restante * -1).toFixed(2)} bs
+                </h4>
+            )}
             <br />
             
             <br />

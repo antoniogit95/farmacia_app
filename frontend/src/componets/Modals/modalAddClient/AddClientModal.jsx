@@ -43,6 +43,7 @@ export const AddClientModal = ({show, onHide}) => {
                             name: '',
                             surname: '',
                             phone: '', //Opcinal
+                            allergy: '', //Opcional
                             notifications: 'false', // solo si el cliente desee recivir notificaciones
 
                         }}
@@ -63,7 +64,7 @@ export const AddClientModal = ({show, onHide}) => {
                             //validacion para el nombre
                             if(!values.name){
                                 errors.name = 'el campo nombre es requerido obligatoriamente';
-                            }else if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(values.anme)){
+                            }else if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(values.name)){
                                 errors.name = 'el campo no pude tener numeros';
                             }
 
@@ -93,6 +94,7 @@ export const AddClientModal = ({show, onHide}) => {
                                         name: values.name,
                                         surname: values.surname,
                                         telefono: values.phone,
+                                        allergy: values.allergy,
                                         notifications: values.notifications,
                                     }, config);
                                     toast.success('Usuario registrado con éxito', {
@@ -177,6 +179,20 @@ export const AddClientModal = ({show, onHide}) => {
                                         name="phone"
                                         placeholder="Escribe su telefono"
                                         value={values.phone}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                    />
+                                    {touched.phone && errors.phone && <div className="styleErrores">{errors.phone}</div>}
+                                </div>
+                                <div>
+                                    <label htmlFor="phone"> Alergias </label>
+                                    <input
+                                        className="stylesInput"
+                                        type="text"
+                                        id="allergy"
+                                        name="allergy"
+                                        placeholder="Escribe su alergia"
+                                        value={values.allergy}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                     />

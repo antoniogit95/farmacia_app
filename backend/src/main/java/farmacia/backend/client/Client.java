@@ -29,6 +29,7 @@ public class Client {
     private String nit;
     private String companyName;
     private boolean notifications;
+    private String allergy;
 
     @OneToOne
     @JoinColumn (name = "id_person", referencedColumnName = "id")

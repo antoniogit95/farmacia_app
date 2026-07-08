@@ -45,6 +45,7 @@ public class ClientService {
                 .companyName(request.getSurname()+" "+request.getName())
                 .notifications(request.isNotifications())
                 .person(person)
+                .allergy(request.getAllergy())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();

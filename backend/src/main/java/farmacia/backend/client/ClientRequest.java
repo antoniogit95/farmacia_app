@@ -15,5 +15,6 @@ public class ClientRequest {
     private String name;
     private String surname;
     private long telefono;
+    private String allergy;
     private boolean notifications;
 }

@@ -43,10 +43,22 @@ export const TablesLote = () => {
     }
 
     const filteredMedicaments = lotes
+        
         .filter((l) => {
             const text = search.toLowerCase();
-            return l.lotNomber?.toLowerCase().includes(text);
+            const matchLot = l.lotNomber?.toLowerCase().includes(text);
+            
+            const matchMedicament = l.medicament?.comercialName
+                ?.toLowerCase()
+                .includes(text);
+
+            const matchLab = l.medicament?.laboratory
+                ?.toLowerCase()
+                .includes(text);
+
+            return matchLot || matchMedicament || matchLab;
         })
+
         .filter((l) => {
             if (!applyDateFilter) return true;
 
@@ -129,6 +141,7 @@ export const TablesLote = () => {
                         <th className="stylesTh-Td">Precio Venta</th>
                         <th className="stylesTh-Td">Factura</th>
                         <th className="stylesTh-Td">Fecha Expiracion</th>
+                        <th className="stylesTh-Td">Laboratorio</th>
                         <th className="stylesTh-Td">Opciones</th>
                     </tr>
                 </thead>
@@ -141,6 +154,7 @@ export const TablesLote = () => {
                             <td className="stylesTh-Td">{lote.salePrice}</td>
                             <td className="stylesTh-Td">{lote.status? 'Si':'No'}</td>
                             <td className="stylesTh-Td">{lote.expirationTime}</td>
+                            <td className="stylesTh-Td">{lote.medicament.laboratory}</td>
                             <td>
                                 <div className="stylesContentButtonTable">
                                     <button className="stylesButoon" onClick={() => handleClick(lote)}>editar</button>

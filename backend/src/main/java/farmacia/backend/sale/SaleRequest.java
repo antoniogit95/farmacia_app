@@ -3,6 +3,7 @@ package farmacia.backend.sale;
 import java.util.List;
 
 import farmacia.backend.sale.saleDetail.SaleDetailRequest;
+import farmacia.backend.sale.salePayment.PaymentRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,4 +24,6 @@ public class SaleRequest {
     private double discount;
 
     private List<SaleDetailRequest> details;
+    private List<PaymentRequest> payments;
+
 }

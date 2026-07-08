@@ -24,7 +24,7 @@ public class SaleController {
     }
 
     @PostMapping("/reports")
-    public ResponseEntity<List<Sale>> getReports(@RequestBody SaleRequestReport report){
+    public ResponseEntity<SaleReportResponse> getReports(@RequestBody SaleRequestReport report){
         return saleService.getReportSale(report);
     }
 }

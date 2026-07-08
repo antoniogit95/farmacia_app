@@ -2,6 +2,7 @@ package farmacia.backend.medicament;
 
 import java.time.LocalDateTime;
 
+import farmacia.backend.laboratory.Laboratory;
 import farmacia.backend.medicament.presentation.Presentation;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,6 +36,10 @@ public class Medicament {
     private String consetration;
     private String pharmaceForm;
     private String laboratory;
+
+    //@ManyToOne
+    //@JoinColumn( name= "laboratory_id")
+    //private Laboratory laboratoryId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

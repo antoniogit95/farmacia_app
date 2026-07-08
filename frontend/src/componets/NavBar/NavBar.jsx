@@ -107,7 +107,7 @@ export const NavBar = () => {
                           className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
                           to="/addmedication"
                         >
-                          ➤ Agregar Medicamento
+                           Agregar Medicamento
                         </NavLink>
                       </li>
 
@@ -116,7 +116,16 @@ export const NavBar = () => {
                           className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
                           to="/addstock"
                         >
-                          ➤ Stock de Productos
+                           Stock de Productos
+                        </NavLink>
+                      </li>
+
+                      <li>
+                        <NavLink 
+                          className={({ isActive }) => (isActive ? 'stylesActive' : 'stylesA')}
+                          to="/addlaboratory"
+                        >
+                           Laboratorio
                         </NavLink>
                       </li>
                     </ul>

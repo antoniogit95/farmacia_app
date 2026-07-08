@@ -1,10 +1,10 @@
 import jsPDF from "jspdf";
 
-export const printFactura = ({ items, nit, companyName }) => {
+export const printFactura = ({ items, nit, companyName, payments = [], total = 0, totalPaid = 0 }) => {
     const doc = new jsPDF({
         orientation: "portrait",
         unit: "mm",
-        format: [80, 200],
+        format: [80, 400],
     });
 
     let y = 8;
@@ -43,17 +43,15 @@ export const printFactura = ({ items, nit, companyName }) => {
     doc.line(5, y, 75, y);
     y += 4;
 
-    let total = 0;
+    let totalItems = 0;
 
     items.forEach((item) => {
         const quantity = Number(item.quantity) || 0;
         const price = Number(item.unitPrice) || 0;
         const descuento = Number(item.discount) || 0;
-
-        // 🔥 usar subTotal directo (ya viene calculado)
         const final = Number(item.subTotal) || 0;
 
-        total += final;
+        totalItems += final;
 
         doc.text(item.comercialName || "", 5, y);
         y += 4;
@@ -61,13 +59,11 @@ export const printFactura = ({ items, nit, companyName }) => {
         doc.text(`${quantity} x ${price.toFixed(2)} Bs`, 5, y);
         y += 4;
 
-        // (opcional) mostrar descuento solo informativo
         if (descuento > 0) {
             doc.text(`Desc: ${descuento.toFixed(2)} Bs`, 5, y);
             y += 4;
         }
 
-        // 🔥 mostrar subtotal final (ya con descuento aplicado)
         doc.text(`Subtotal: ${final.toFixed(2)} Bs`, 5, y);
         y += 4;
 
@@ -75,21 +71,51 @@ export const printFactura = ({ items, nit, companyName }) => {
         y += 3;
     });
 
+    y += 2;
+
     doc.setFontSize(10);
-    doc.text(`TOTAL: ${total.toFixed(2)} Bs`, 5, y + 4);
+    doc.text(`TOTAL: ${total.toFixed(2)} Bs`, 5, y);
+    y += 6;
+
+    // 🔥 METODOS DE PAGO
+    doc.setFontSize(7);
+    doc.text("METODOS DE PAGO", 5, y);
+    y += 4;
+
+    payments.forEach((p) => {
+        const amount = Number(p.amount) || 0;
+        doc.text(`${p.paymentType}: ${amount.toFixed(2)} Bs`, 5, y);
+        y += 4;
+    });
+
+    y += 2;
+
+    doc.text(`PAGADO: ${totalPaid.toFixed(2)} Bs`, 5, y);
+    y += 4;
+
+    const cambio = totalPaid - total;
+
+    if (cambio > 0) {
+        doc.text(`CAMBIO: ${cambio.toFixed(2)} Bs`, 5, y);
+        y += 4;
+    }
+
+    doc.line(5, y, 75, y);
+    y += 5;
+
+    doc.setFontSize(6);
+    doc.text("GRACIAS POR SU COMPRA", 40, y, { align: "center" });
 
     // 🔥 GENERAR PDF EN MEMORIA
     const blob = doc.output("blob");
     const url = URL.createObjectURL(blob);
 
-    // 🔥 CREAR IFRAME OCULTO
     const iframe = document.createElement("iframe");
     iframe.style.display = "none";
     iframe.src = url;
 
     document.body.appendChild(iframe);
 
-    // 🔥 VISTA PREVIA
     iframe.onload = () => {
         iframe.contentWindow.focus();
         iframe.contentWindow.print();

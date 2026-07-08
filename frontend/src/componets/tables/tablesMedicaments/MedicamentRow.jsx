@@ -17,10 +17,12 @@ export const MedicamentRow = ({medicament, onSuccess}) => {
             <td className="stylesTh-Td">{medicament.consetration}</td>
             <td className="stylesTh-Td">{medicament.pharmaceForm}</td>
             <td className="stylesTh-Td">{medicament.laboratory}</td>
-            <div className="stylesContentButton-two">
-                <button className="stylesButoonLogin" onClick={() => setShowModalEdit(true)}>Editar</button>
-                <button className="stylesButoonLogin" onClick={() => setShowModalLote(true)}>Add Lote</button>
-            </div>
+            <td className="stylesTh-Td">
+                <div className="stylesContentButton-two">
+                    <button className="stylesButoonLogin" onClick={() => setShowModalEdit(true)}>Editar</button>
+                    <button className="stylesButoonLogin" onClick={() => setShowModalLote(true)}>Add Lote</button>
+                </div>
+            </td>
         </tr>
 
         <EditMedicationModal

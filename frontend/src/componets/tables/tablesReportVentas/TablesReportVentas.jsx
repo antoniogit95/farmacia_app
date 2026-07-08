@@ -39,8 +39,9 @@ export const TablesReportVentas = () => {
                     },
                     config
             );
-            setDatos(response.data);
-            generarTotal(response.data);
+            console.log(response)
+            setDatos(response.data.sale);
+            generarTotal(response.data.sale);
         } catch (error) {
             console.error("error al cargar: ", error)
             toast.error("error al recuperar los datos")
@@ -50,6 +51,7 @@ export const TablesReportVentas = () => {
     }
 
     const generarTotal = (ventas) => {
+        console.log(ventas);
         const total = ventas.reduce(
             (acc, venta) => acc + Number(venta.subTotal),
             0
