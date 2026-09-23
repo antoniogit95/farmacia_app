@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './AddClient.css';
 import { NavBar } from "../../componets/NavBar/NavBar";
 import { TablesClient } from "../../componets/tables/tablesClient/TablesClient";
-import { AddClientModal } from "../../componets/Modals/modalAddClient/AddClientModal";
+import { AddClientModal } from "../../componets/Modals/client/AddClientModal";
 
 export const AddClient = () =>{
 

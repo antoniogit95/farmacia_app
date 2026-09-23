@@ -1,29 +1,17 @@
 import React from "react";
 import './AddClientModal.css'
-import { URL_API_private, URL_API_public } from "../../../providerContext/EndPoint";
 import { Modal} from "react-bootstrap";
 import { Formik } from "formik";
 import { toast, ToastContainer } from "react-toastify";
-import axios from "axios";
+import { clientService } from "../../../services/clientServices";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const AddClientModal = ({show, onHide}) => {
+    const queryClient = useQueryClient();
 
-    const endPointPrivate = URL_API_private + '/client/add';
-    const endPointPrivateCi = URL_API_private + '/person';
-    const token  = JSON.parse(localStorage.getItem('user_data')).accessToken;
-
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-
-    const ExistCi = async (data) => {
+    const ExistCi = async (ci) => {
         try {
-            const response = await axios.get(
-                `${endPointPrivateCi}/existci?ci=${data}`, config
-            );
-            return response.data; // true o false
+            return await clientService.existCi(ci);
         } catch (error) {
             console.log(error);
             return false;
@@ -44,7 +32,7 @@ export const AddClientModal = ({show, onHide}) => {
                             surname: '',
                             phone: '', //Opcinal
                             allergy: '', //Opcional
-                            notifications: 'false', // solo si el cliente desee recivir notificaciones
+                            notifications: false, // solo si el cliente desee recivir notificaciones
 
                         }}
 
@@ -83,38 +71,50 @@ export const AddClientModal = ({show, onHide}) => {
                             return errors;
                         }}
 
-                        onSubmit={(values) => {
-                            const store = async (e) => {
-                                console.log(values)
-                                console.log("end point: "+endPointPrivate)
-                                e.preventDefault()
-                                try {
-                                    await axios.post(endPointPrivate, {
-                                        ci: values.ci,
-                                        name: values.name,
-                                        surname: values.surname,
-                                        telefono: values.phone,
-                                        allergy: values.allergy,
-                                        notifications: values.notifications,
-                                    }, config);
-                                    toast.success('Usuario registrado con éxito', {
-                                        position: 'top-right',
-                                        autoClose: 3000,      
-                                    });
-                                    setTimeout(() => {
-                                        onHide();
-                                    }, 1000); 
-                                } catch (error) {
-                                    console.log(error)
-                                    console.log("mensaje")
-                                    toast.error(error.code, {
-                                        position: 'top-right', 
-                                        autoClose: 3000,  
-                                    });
-                                }
-                                
+                        onSubmit={async (values, { resetForm }) => {
+
+                            console.log(values);
+
+                            try {
+
+                                await clientService.create({
+                                    ci: values.ci,
+                                    name: values.name,
+                                    surname: values.surname,
+                                    telefono: values.phone,
+                                    allergy: values.allergy,
+                                    notifications: values.notifications,
+                                });
+
+                                // Avisamos a React Query que la lista cambió
+                                await queryClient.invalidateQueries({
+                                    queryKey: ["clients"],
+                                });
+
+                                toast.success("Usuario registrado con éxito", {
+                                    position: "top-right",
+                                    autoClose: 3000,
+                                });
+
+                                resetForm();
+
+                                setTimeout(() => {
+                                    onHide();
+                                }, 1000);
+
+                            } catch (error) {
+
+                                console.error(error);
+
+                                toast.error(
+                                    error.response?.data?.message ||
+                                    "Error al registrar el cliente",
+                                    {
+                                        position: "top-right",
+                                        autoClose: 3000,
+                                    }
+                                );
                             }
-                            store(event);
                         }}
                     >
                         {({values, errors, touched, handleSubmit, handleChange, handleBlur}) => (
@@ -200,11 +200,10 @@ export const AddClientModal = ({show, onHide}) => {
                                 </div>
                                 <div>
                                     <label>¿Desea recibir notificaciones?</label>
-
                                     <select
                                         className="stylesInput"
                                         name="notifications"
-                                        value={values.notifications}
+                                        value={String(values.notifications)}
                                         onChange={(e) =>
                                             handleChange({
                                                 target: {
