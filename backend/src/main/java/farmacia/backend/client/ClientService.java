@@ -65,4 +65,52 @@ public class ClientService {
         return ResponseEntity.ok(clientRepository.findAll());
 
     }
+
+    public ResponseEntity<Client> update(Long id, ClientRequest request){
+        try {
+            
+            Optional<Client> optionalClient =
+                    clientRepository.findById(id);
+
+            if(optionalClient.isEmpty()){
+                return ResponseEntity.notFound().build();
+            }
+
+            Client client = optionalClient.get();
+            Person person = client.getPerson();
+
+            person.setCi(request.getCi());
+            person.setName(request.getName());
+            person.setSurname(request.getSurname());
+            person.setTelefono(request.getTelefono());
+            person.setUpdatedAt(LocalDateTime.now());
+
+            personRepository.save(person);
+
+            client.setNit(request.getCi());
+            client.setCompanyName(
+                    request.getSurname()
+                    + " "
+                    + request.getName()
+            );
+
+            client.setAllergy(request.getAllergy());
+            client.setNotifications(
+                    request.isNotifications()
+            );
+
+            client.setUpdatedAt(
+                    LocalDateTime.now()
+            );
+
+            clientRepository.save(client);
+
+            return ResponseEntity.ok(client);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
