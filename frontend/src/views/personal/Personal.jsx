@@ -3,7 +3,7 @@ import { NavBar } from "../../componets/NavBar/NavBar";
 import "./Personal.css"
 import { TablesPersonal } from "../../componets/tables/tablesPersonal/TablesPersonal";
 import { useState } from "react";
-import { PersonalModal } from "../../componets/Modals/modalsPerson/PersonModal";
+import { PersonalModal } from "../../componets/Modals/personal/PersonModal";
 
 export const Personal = () => {
 

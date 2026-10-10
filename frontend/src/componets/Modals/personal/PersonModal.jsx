@@ -4,26 +4,33 @@ import { Modal } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
 import { URL_API_public } from "../../../providerContext/EndPoint";
 import axios from "axios";
+import { useQueryClient } from "@tanstack/react-query";
+import { personalService } from "../../../services/personalService";
+import * as Yup from "yup";
+
 export const PersonalModal = ({ show, onHide }) => {
 
-    const endPoint = URL_API_public+"/register"
-    const endPointP = URL_API_public;
+    const queryClient = useQueryClient();
 
-    const ciExistente = async (dato) =>{
+     const existCi = async (ci) => {
+            try {
+                return await personalService.existCi(ci);
+            } catch (error) {
+                console.log(error);
+                return false;
+            }
+    };
+
+    const existUser = async (user) => {
         try {
-            const response = await axios.post(endPointP+"/checkci", 
-                {
-                    username : dato,
-                    password : ""
-                })
-            return response.data;
-        } catch (e) {
-            console.error(e)
-            return true;
+            return await personalService.existUsername(user)
+        } catch (error) {
+            console.log(error)
+            return false;
         }
     }
 
-    const emailExistente = async (dato) => {//se cambio de email a username
+    const emailExistente = async (dato) => {
         try {
             const response = await axios.post(endPointP+"/checkusername", 
                 {
@@ -36,10 +43,103 @@ export const PersonalModal = ({ show, onHide }) => {
             return true;
         }
     }
+
+
     const sugesRole = [
         {id: 1, role: "ADMIN"},
         {id: 2, role: "PHARMACIST"},
     ];
+
+    const validationScheme = Yup.object({
+
+        ci: Yup.string()
+            .required( "El campo Cedula de Identidad es obligatorio" )
+            .matches( /^[0-9\s]{1,9}$/, "El CI debe contener solo numeros")
+            .test(
+                "ci-existe",
+                "El numero de carnet ya fue registrado",
+                async (value) => {
+                    if (!value){
+                        return true;
+                    }
+                    const existe = await existCi(value);
+                    return !existe;
+                }
+            ) ,
+
+        nombre: Yup.string() 
+            .required( "El campo nombre es obligatorio" ) 
+            .matches( /^[a-zA-ZÀ-ÿ\s]{1,40}$/, 
+                "El nombre no puede contener números ni caracteres especiales" 
+            ),
+
+        apellidos: Yup.string() 
+            .required( "El campo apellido es obligatorio" ) 
+            .matches( /^[a-zA-ZÀ-ÿ\s]{1,40}$/, 
+                    "El apellido no puede contener números ni caracteres especiales" 
+            ), 
+
+        telefono: Yup.string() 
+            .matches( /^[0-9\s]{0,10}$/, 
+                "El teléfono no puede contener letras ni caracteres especiales" 
+            ),
+
+        user: Yup.string()
+            .required("El usuario es obligatorio")
+            .test(
+                "username-existente",
+                "El nombre de usuario ya fue registrado",
+                async (value) => {
+
+                    if (!value) {
+                        return true;
+                    }
+
+                    const existe = await existUser(value);
+
+                    return !existe;
+                }
+        ),
+
+        /**email: Yup.string()
+            .required(
+                "El campo Correo Electrónico es obligatorio"
+            )
+            .email(
+                "Ingrese un correo electrónico válido"
+            )
+            .test(
+                "email-existente",
+                "El correo electrónico ya fue registrado",
+                async (value) => {
+                    if (!value) {
+                        return true;
+                    }
+
+                const existe = await emailExistente(value);
+
+                return !existe;
+            }
+        ),**/
+
+        password: Yup.string()
+            .required(
+                "El campo Contraseña es obligatorio"
+            )
+            .min(
+                6,
+                "La contraseña debe tener al menos 6 caracteres"
+            ),
+
+        confirmar_password: Yup.string()
+            .required(
+                "El campo Confirmar Contraseña es obligatorio"
+            )
+            .oneOf(
+                [Yup.ref("password")],
+                "Las contraseñas no coinciden"
+        ),
+    })
 
     return(<>
         <Modal show={show} onHide={onHide} centered>
@@ -56,106 +156,55 @@ export const PersonalModal = ({ show, onHide }) => {
                             telefono: '',
                             role:'PHARMACIST',
                             //fecha_nacimiento: '',
+                            user: '',
                             email: '',
                             password: '',
                             confirmar_password: '',  
                         }}
 
-                        validate={async (valores) => {
-                            let errores = {};
+                        validationSchema={validationScheme}
 
-                            //validacion Celula de Identidad
-                            if(!valores.ci){
-                                errores.ci = 'el campo Celula de Intentidad es requerido obligatoriamente';
-                            }else if(!/^[0-9\s]{1,9}$/.test(valores.ci)){
-                                errores.ci = 'no es un numero';
-                            }else if( await ciExistente(valores.ci)){
-                                errores.ci = 'el numero de carnet ya fue registrado';
+                        onSubmit={ async (valores, {resetForm, setSubmitting}) => {
+                            console.log("imprimir mensaje que llego aqui");
+                            try {
+
+                                await personalService.create({
+                                    username: valores.user,
+                                    password: valores.password,
+                                    name: valores.nombre.toUpperCase(),
+                                    surname: valores.apellidos.toUpperCase(),
+                                    ci: valores.ci,
+                                    email: valores.user,
+                                    telefono: valores.telefono,
+                                    role: valores.role,
+                                });
+                                    
+                                await queryClient.invalidateQueries({
+                                    queryKey: ["personal"],
+                                });
+
+                                toast.success('Usuario registrado con éxito', {
+                                    position: 'top-right',
+                                    autoClose: 3000,      
+                                });
+
+                                resetForm();
+
+                                setTimeout(() => {
+                                    onHide();
+                                }, 1000);
+
+                            } catch (error) {
+                                console.log(error)
+                                console.log("mensaje")
+                                toast.error(error.code, {
+                                    position: 'top-right', 
+                                    autoClose: 3000,  
+                                });
+                            } finally {
+                                setSubmitting(false);
                             }
-
-                            //validacion para el nombre
-                            if(!valores.nombre){
-                                errores.nombre = 'el campo nombre es requerido obligatoriamente';
-                            }else if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(valores.nombre)){
-                                errores.nombre = 'el campo no pude tener numeros';
-                            }
-
-                            //validacion apellidos
-                            if(!valores.apellidos){
-                                errores.apellidos = 'el campo Apellido Paterno es requerido obligatoriamente';
-                            }else if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(valores.apellidos)){
-                                errores.apellidos = 'el campo no pude tener numeros';
-                            }
-
-                            //validacion Telefono
-                            if(!valores.telefono){
-                                errores.telefono = 'el campo Telefono es requerido obligatoriamente';
-                            }else if(!/^[0-9\s]{1,10}$/.test(valores.telefono)){
-                                errores.telefono = 'el campo no pude tener letras o caracteres especiales';
-                            }
-
-                            //validacion de fecha de nacimiento
-                            /**if(!valores.fecha_nacimiento){
-                                errores.fecha_nacimiento = 'el campo Fecha de nacimiento es obligatoriamente';
-                            }*/
-
-                            //validacion correo electronio o username
-                            if(!valores.email){
-                                errores.email = 'el campo Correo Electronico es requerido obligatoriamente';
-                            }else if( await emailExistente(valores.email)){
-                                errores.email = 'el correo electronico ya fue registrado';
-                            }
-
-                            //validacion para contraseña
-                            if(!valores.password){
-                                errores.password = 'el campo Contraseña es requerido obligatoriamente';
-                            }else if(valores.password.length < 6){
-                                errores.password = 'el campo Contraseña debe tener una longitud mayor a 6 digitos';
-                            }
-
-                            //validacion para confirmar contraseña
-                            if(!valores.confirmar_password){
-                                errores.confirmar_password = 'el campo confirmar Contraseña es requerido obligatoriamente';
-                            }else if(valores.password !== valores.confirmar_password){
-                                errores.confirmar_password = 'las contraseñas no coiciden ';
-                            }
-
-                            return errores;
-                        }}
-
-                        onSubmit={ (valores) => {
-                            const store = async (e) => {
-                                console.log(valores)
-                                console.log("end point: "+endPoint)
-                                e.preventDefault()
-                                try {
-                                    await axios.post(endPoint, {
-                                        username: valores.email,
-                                        password: valores.password,
-                                        name: valores.nombre.toUpperCase(),
-                                        surname: valores.apellidos.toUpperCase(),
-                                        ci: valores.ci,
-                                        email: valores.email,
-                                        telefono: valores.telefono,
-                                        role: valores.role
-                                    });
-                                    toast.success('Usuario registrado con éxito', {
-                                        position: 'top-right',
-                                        autoClose: 3000,      
-                                    });
-                                    navigate('/login');  
-                                } catch (error) {
-                                    console.log(error)
-                                    console.log("mensaje")
-                                    toast.error(error.code, {
-                                        position: 'top-right', 
-                                        autoClose: 3000,  
-                                    });
-                                }
                                 
-                            }
-                            store(event);
-
                         }}
 
                     >
@@ -252,18 +301,18 @@ export const PersonalModal = ({ show, onHide }) => {
                                 {touched.role && errors.role && <div className='styleErrores'>{errors.role}</div>}
                             </div>
                             <div>
-                                <label htmlFor='email'>Usuario</label>
+                                <label htmlFor='user'>Usuario</label>
                                 <input 
                                     className='stylesInput'
                                     type='text'
-                                    id='email'
-                                    name='email'
+                                    id='user'
+                                    name='user'
                                     placeholder='Escribe tu Usuario'
-                                    value={values.email}
+                                    value={values.user}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                 />
-                                {touched.email && errors.email && <div className='styleErrores'>{errors.email}</div>}
+                                {touched.user && errors.user && <div className='styleErrores'>{errors.user}</div>}
                             </div>
                             <div>
                                 <label htmlFor='password'>Contraseña</label>

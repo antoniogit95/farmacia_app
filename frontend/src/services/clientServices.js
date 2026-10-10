@@ -13,10 +13,7 @@ export const clientService = {
     },
 
     update: async ({ id, client }) => {
-        const { data } = await privateApi.put(
-            `/client/update/${id}`,
-            client
-        );
+        const { data } = await privateApi.put(`/client/update/${id}`,client);
         return data;
     },
 

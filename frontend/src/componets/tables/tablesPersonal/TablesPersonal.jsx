@@ -1,43 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./TablesPersonal.css"
-import axios from "axios";
-import { URL_API_private } from "../../../providerContext/EndPoint";
 import { FaSpinner } from 'react-icons/fa';
+import { FiEdit,FiLock } from "react-icons/fi";
+import { useQuery } from "@tanstack/react-query";
+import { personalService } from "../../../services/personalService";
+import { EditPersonModal } from "../../Modals/personal/EditPersonal";
 
 export const TablesPersonal = () => {
-    const [personal, setPersonal] = useState([]);
-    const [loading, setLoading] = useState(false);
 
-    const token  = JSON.parse(localStorage.getItem('user_data')).accessToken;
-    const endPoint = URL_API_private + "/user/list";
+    const [selectedPersonal, setSelectedPersonal] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);
 
+    const {
+        data: personal = [], 
+        isLoading,
+        isError,
+        error
+    } = useQuery({
+        queryKey: ["personal"],
+        queryFn: personalService.getAll,
+    })
 
-    useEffect(() =>{
-        getallPersonal();  
-    }, []);
-
-    const config = {
-        headers:{
-            Authorization: `Bearer ${token}`,
-        }
-    }
-
-    const getallPersonal = async () =>{
-        setLoading(true);
-        try {    
-            const response = await axios.get(endPoint, config);
-            setPersonal(response.data)   
-            setLoading(false)
-            console.log(response.data);
-        } catch (error) {
-            console.error(error);   
-        }
+     if (isError) {
+        console.error(error);
     }
 
     return(<>
         <div>
             <h2 className="stylesH2Subtitule">lista del personal</h2>
-            {loading && (
+            {isLoading && (
                         <div className="loading-spinner">
                             <FaSpinner className="spinner-icon" />
                         </div>
@@ -64,8 +55,19 @@ export const TablesPersonal = () => {
                                 <td className="stylesTh-Td">{data.username}</td>
                                 <td>
                                     <div className="stylesContentButton-two">
-                                        <button className="stylesButoonLogin">editar</button>
-                                        <button className="stylesButoonLogin">borrar</button>
+                                        
+                                        <button 
+                                        className="stylesButoonLogin"
+                                        onClick={() =>{
+                                            setSelectedPersonal(data);
+                                            setShowEditModal(true);
+                                        }}
+                                        > <FiEdit/>editar</button>
+                                        
+                                        <button 
+                                        className="stylesButoonLogin">
+                                            
+                                            <FiLock style={{ color: "red", marginRight: "5px"  }}/> Bloquear</button>
                                     </div>
                                 </td>
                             </tr>
@@ -75,5 +77,13 @@ export const TablesPersonal = () => {
                 </table>
             </div>
         </div>
+        <EditPersonModal
+            show={showEditModal}
+            onHide={() =>{
+                setSelectedPersonal(null);
+                setShowEditModal(false);
+            }}
+            person={selectedPersonal}
+        />
     </>);
 }

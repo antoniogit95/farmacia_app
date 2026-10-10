@@ -1,12 +1,15 @@
+
 import React from "react";
-import './AddClientModal.css'
-import { Modal} from "react-bootstrap";
-import { Formik } from "formik";
+import "./AddClientModal.css";
+import { Modal } from "react-bootstrap";
+import { Formik, Form, Field } from "formik";
 import { toast, ToastContainer } from "react-toastify";
 import { clientService } from "../../../services/clientServices";
 import { useQueryClient } from "@tanstack/react-query";
+import * as Yup from "yup";
 
-export const AddClientModal = ({show, onHide}) => {
+export const AddClientModal = ({ show, onHide }) => {
+
     const queryClient = useQueryClient();
 
     const ExistCi = async (ci) => {
@@ -18,218 +21,321 @@ export const AddClientModal = ({show, onHide}) => {
         }
     };
 
-    return(<>
-        <Modal show={show} onHide={onHide} centered>
-            <Modal.Header closeButton className="modalHeader">
-                <Modal.Title> Agregar Cliente</Modal.Title>
-            </Modal.Header>
-            <Modal.Body className="modalBody">
-                <div className="stylesRegistroPersonal">
-                    <Formik
-                        initialValues={{
-                            ci: '',
-                            name: '',
-                            surname: '',
-                            phone: '', //Opcinal
-                            allergy: '', //Opcional
-                            notifications: false, // solo si el cliente desee recivir notificaciones
+    const validationSchema = Yup.object({
 
-                        }}
+        ci: Yup.string()
+            .required("El campo Cédula de Identidad es obligatorio")
+            .matches(
+                /^[0-9\s]{1,9}$/,
+                "El CI debe contener solamente números"
+            )
+            .test(
+                "ci-existe",
+                "El número de carnet ya fue registrado",
+                async (value) => {
 
-                        validate={async (values) => {
-                            
-                            let errors = {};
+                    if (!value) {
+                        return true;
+                    }
 
-                            //validacion Celula de Identidad
-                            if(!values.ci){
-                                errors.ci = 'el campo Celula de Intentidad es requerido obligatoriamente';
-                            }else if(!/^[0-9\s]{1,9}$/.test(values.ci)){
-                                errors.ci = 'no es un numero';
-                            }else if( await ExistCi(values.ci)){
-                                errors.ci = 'el numero de carnet ya fue registrado';
-                            }
+                    const existe = await ExistCi(value);
 
-                            //validacion para el nombre
-                            if(!values.name){
-                                errors.name = 'el campo nombre es requerido obligatoriamente';
-                            }else if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(values.name)){
-                                errors.name = 'el campo no pude tener numeros';
-                            }
+                    return !existe;
+                }
+            ),
 
-                            //validacion apellidos
-                            if(!values.surname){
-                                errors.surname = 'el campo Apellido Paterno es requerido obligatoriamente';
-                            }else if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(values.surname)){
-                                errors.surname = 'el campo no pude tener numeros';
-                            }
+        name: Yup.string()
+            .required("El campo nombre es obligatorio")
+            .matches(
+                /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
+                "El nombre no puede contener números ni caracteres especiales"
+            ),
 
-                            //validacion Telefono
-                            if(!/^[0-9\s]{1,10}$/.test(values.phone)){
-                                errors.phone = 'el campo no pude tener letras o caracteres especiales';
-                            }
+        surname: Yup.string()
+            .required("El campo apellido es obligatorio")
+            .matches(
+                /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
+                "El apellido no puede contener números ni caracteres especiales"
+            ),
 
-                            return errors;
-                        }}
+        phone: Yup.string()
+            .matches(
+                /^[0-9\s]{0,10}$/,
+                "El teléfono no puede contener letras ni caracteres especiales"
+            ),
 
-                        onSubmit={async (values, { resetForm }) => {
+        allergy: Yup.string(),
 
-                            console.log(values);
+        notifications: Yup.boolean(),
 
-                            try {
+    });
 
-                                await clientService.create({
-                                    ci: values.ci,
-                                    name: values.name,
-                                    surname: values.surname,
-                                    telefono: values.phone,
-                                    allergy: values.allergy,
-                                    notifications: values.notifications,
-                                });
+    return (
+        <>
+            <Modal show={show} onHide={onHide} centered>
 
-                                // Avisamos a React Query que la lista cambió
-                                await queryClient.invalidateQueries({
-                                    queryKey: ["clients"],
-                                });
+                <Modal.Header closeButton className="modalHeader">
+                    <Modal.Title>
+                        Agregar Cliente
+                    </Modal.Title>
+                </Modal.Header>
 
-                                toast.success("Usuario registrado con éxito", {
-                                    position: "top-right",
-                                    autoClose: 3000,
-                                });
+                <Modal.Body className="modalBody">
 
-                                resetForm();
+                    <div className="stylesRegistroPersonal">
 
-                                setTimeout(() => {
-                                    onHide();
-                                }, 1000);
+                        <Formik
+                            initialValues={{
+                                ci: "",
+                                name: "",
+                                surname: "",
+                                phone: "",
+                                allergy: "",
+                                notifications: false,
+                            }}
 
-                            } catch (error) {
+                            validationSchema={validationSchema}
 
-                                console.error(error);
+                            onSubmit={async (
+                                values,
+                                { resetForm, setSubmitting }
+                            ) => {
 
-                                toast.error(
-                                    error.response?.data?.message ||
-                                    "Error al registrar el cliente",
-                                    {
-                                        position: "top-right",
-                                        autoClose: 3000,
-                                    }
-                                );
-                            }
-                        }}
-                    >
-                        {({values, errors, touched, handleSubmit, handleChange, handleBlur}) => (
-                            <form onSubmit={handleSubmit}>
-                                <div>
-                                    <label htmlFor="ci"> Celulda de Identidad </label>
-                                    <input
-                                        className="stylesInput"
-                                        type="text"
-                                        id="ci"
-                                        name="ci"
-                                        placeholder="Escribe tu numero de Carnet"
-                                        value={values.ci}
-                                        onChange={(e) => {
-                                            e.target.value = e.target.value.toUpperCase();
-                                            handleChange(e);
-                                        }}
-                                        onBlur={handleBlur}
-                                    />
-                                    {touched.ci && errors.ci && <div className="styleErrores">{errors.ci}</div>}
-                                </div>
-                                <div>
-                                    <label htmlFor="name"> Nombre </label>
-                                    <input
-                                        className="stylesInput"
-                                        type="text"
-                                        id="name"
-                                        name="name"
-                                        placeholder="Escribe su Nombre"
-                                        value={values.name}
-                                        onChange={(e) => {
-                                            e.target.value = e.target.value.toUpperCase();
-                                            handleChange(e);
-                                        }}
-                                        onBlur={handleBlur}
-                                    />
-                                    {touched.name && errors.name && <div className="styleErrores">{errors.name}</div>}
-                                </div>
-                                <div>
-                                    <label htmlFor="surname"> Apellido </label>
-                                    <input
-                                        className="stylesInput"
-                                        type="text"
-                                        id="surname"
-                                        name="surname"
-                                        placeholder="Escribe sus Apellidos"
-                                        value={values.surname}
-                                        onChange={(e) => {
-                                            e.target.value = e.target.value.toUpperCase();
-                                            handleChange(e);
-                                        }}
-                                        onBlur={handleBlur}
-                                    />
-                                    {touched.surname && errors.surname && <div className="styleErrores">{errors.surname}</div>}
-                                </div>
-                                <div>
-                                    <label htmlFor="phone"> Telefono </label>
-                                    <input
-                                        className="stylesInput"
-                                        type="number"
-                                        id="phone"
-                                        name="phone"
-                                        placeholder="Escribe su telefono"
-                                        value={values.phone}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                    />
-                                    {touched.phone && errors.phone && <div className="styleErrores">{errors.phone}</div>}
-                                </div>
-                                <div>
-                                    <label htmlFor="phone"> Alergias </label>
-                                    <input
-                                        className="stylesInput"
-                                        type="text"
-                                        id="allergy"
-                                        name="allergy"
-                                        placeholder="Escribe su alergia"
-                                        value={values.allergy}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                    />
-                                    {touched.phone && errors.phone && <div className="styleErrores">{errors.phone}</div>}
-                                </div>
-                                <div>
-                                    <label>¿Desea recibir notificaciones?</label>
-                                    <select
-                                        className="stylesInput"
-                                        name="notifications"
-                                        value={String(values.notifications)}
-                                        onChange={(e) =>
-                                            handleChange({
-                                                target: {
-                                                    name: "notifications",
-                                                    value: e.target.value === "true",
-                                                }
-                                            })
+                                try {
+
+                                    await clientService.create({
+                                        ci: values.ci,
+                                        name: values.name.toUpperCase(),
+                                        surname: values.surname.toUpperCase(),
+                                        telefono: values.phone,
+                                        allergy: values.allergy,
+                                        notifications: values.notifications,
+                                    });
+
+                                    await queryClient.invalidateQueries({
+                                        queryKey: ["clients"],
+                                    });
+
+                                    toast.success(
+                                        "Cliente registrado con éxito",
+                                        {
+                                            position: "top-right",
+                                            autoClose: 3000,
                                         }
-                                    >
-                                        <option value="false">No</option>
-                                        <option value="true">Sí</option>
-                                    </select>
-                                </div>
-                                <br></br>
-                                <div className="stylesContenedorButton">
-                                    <button  className='stylesButoon' type="submit">
-                                        Guardar
-                                    </button>
-                                    
-                                </div>
-                            </form>
-                        )}
-                    </Formik>
-                    <ToastContainer/>
-                </div>
-            </Modal.Body>
-        </Modal>
-    </>);
-}
+                                    );
+
+                                    resetForm();
+
+                                    setTimeout(() => {
+                                        onHide();
+                                    }, 1000);
+
+                                } catch (error) {
+
+                                    console.error(error);
+
+                                    toast.error(
+                                        error.response?.data?.message ||
+                                        "Error al registrar el cliente",
+                                        {
+                                            position: "top-right",
+                                            autoClose: 3000,
+                                        }
+                                    );
+
+                                } finally {
+
+                                    setSubmitting(false);
+
+                                }
+                            }}
+                        >
+
+                            {({ values, errors, touched, isSubmitting }) => (
+
+                                <Form>
+
+                                    {/* CI */}
+                                    <div>
+                                        <label htmlFor="ci">
+                                            Cédula de Identidad
+                                        </label>
+
+                                        <Field
+                                            className="stylesInput"
+                                            type="text"
+                                            id="ci"
+                                            name="ci"
+                                            placeholder="Escribe tu número de Carnet"
+                                        />
+
+                                        {touched.ci && errors.ci && (
+                                            <div className="styleErrores">
+                                                {errors.ci}
+                                            </div>
+                                        )}
+                                    </div>
+
+
+                                    {/* NOMBRE */}
+                                    <div>
+                                        <label htmlFor="name">
+                                            Nombre
+                                        </label>
+
+                                        <Field
+                                            className="stylesInput"
+                                            type="text"
+                                            id="name"
+                                            name="name"
+                                            placeholder="Escribe su Nombre"
+                                        />
+
+                                        {touched.name && errors.name && (
+                                            <div className="styleErrores">
+                                                {errors.name}
+                                            </div>
+                                        )}
+                                    </div>
+
+
+                                    {/* APELLIDO */}
+                                    <div>
+                                        <label htmlFor="surname">
+                                            Apellido
+                                        </label>
+
+                                        <Field
+                                            className="stylesInput"
+                                            type="text"
+                                            id="surname"
+                                            name="surname"
+                                            placeholder="Escribe sus Apellidos"
+                                        />
+
+                                        {touched.surname && errors.surname && (
+                                            <div className="styleErrores">
+                                                {errors.surname}
+                                            </div>
+                                        )}
+                                    </div>
+
+
+                                    {/* TELEFONO */}
+                                    <div>
+                                        <label htmlFor="phone">
+                                            Teléfono
+                                        </label>
+
+                                        <Field
+                                            className="stylesInput"
+                                            type="number"
+                                            id="phone"
+                                            name="phone"
+                                            placeholder="Escribe su teléfono"
+                                        />
+
+                                        {touched.phone && errors.phone && (
+                                            <div className="styleErrores">
+                                                {errors.phone}
+                                            </div>
+                                        )}
+                                    </div>
+
+
+                                    {/* ALERGIAS */}
+                                    <div>
+                                        <label htmlFor="allergy">
+                                            Alergias
+                                        </label>
+
+                                        <Field
+                                            className="stylesInput"
+                                            type="text"
+                                            id="allergy"
+                                            name="allergy"
+                                            placeholder="Escribe su alergia"
+                                        />
+
+                                        {touched.allergy && errors.allergy && (
+                                            <div className="styleErrores">
+                                                {errors.allergy}
+                                            </div>
+                                        )}
+                                    </div>
+
+
+                                    {/* NOTIFICACIONES */}
+                                    <div>
+                                        <label htmlFor="notifications">
+                                            ¿Desea recibir notificaciones?
+                                        </label>
+
+                                        <Field name="notifications">
+                                            {({ field, form }) => (
+
+                                                <select
+                                                    {...field}
+                                                    className="stylesInput"
+                                                    id="notifications"
+                                                    value={String(field.value)}
+                                                    onChange={(e) =>
+                                                        form.setFieldValue(
+                                                            "notifications",
+                                                            e.target.value === "true"
+                                                        )
+                                                    }
+                                                >
+
+                                                    <option value="false">
+                                                        No
+                                                    </option>
+
+                                                    <option value="true">
+                                                        Sí
+                                                    </option>
+
+                                                </select>
+
+                                            )}
+                                        </Field>
+
+                                    </div>
+
+
+                                    <br />
+
+
+                                    {/* BOTON */}
+                                    <div className="stylesContenedorButton">
+
+                                        <button
+                                            className="stylesButoon"
+                                            type="submit"
+                                            disabled={isSubmitting}
+                                        >
+                                            {isSubmitting
+                                                ? "Guardando..."
+                                                : "Guardar"
+                                            }
+                                        </button>
+
+                                    </div>
+
+                                </Form>
+
+                            )}
+
+                        </Formik>
+
+                        <ToastContainer />
+
+                    </div>
+
+                </Modal.Body>
+
+            </Modal>
+        </>
+    );
+};
+

@@ -41,53 +41,23 @@ export const TablesClient = () => {
                     <table className="styleTable">
                         <thead className="stylesHead">
                             <tr>
-                                <th className="stylesTh-Td">
-                                    Nit / Ci
-                                </th>
-
-                                <th className="stylesTh-Td">
-                                    Compañia
-                                </th>
-
-                                <th className="stylesTh-Td">
-                                    Telefono
-                                </th>
-
-                                <th className="stylesTh-Td">
-                                    Notificaciones
-                                </th>
-
-                                <th className="stylesTh-Td">
-                                    Opciones
-                                </th>
+                                <th className="stylesTh-Td">Nit / Ci</th>
+                                <th className="stylesTh-Td">Compañia</th>
+                                <th className="stylesTh-Td">Telefono</th>
+                                <th className="stylesTh-Td">Notificaciones</th>
+                                <th className="stylesTh-Td">Opciones</th>
                             </tr>
                         </thead>
 
                         <tbody className="styleBody">
 
                             {clients.map((data) => (
-                                <tr
-                                    className="stylesTr"
-                                    key={data.id}
-                                >
-                                    <td className="stylesTh-Td">
-                                        {data.nit}
-                                    </td>
-
-                                    <td className="stylesTh-Td">
-                                        {data.companyName}
-                                    </td>
-
-                                    <td className="stylesTh-Td">
-                                        {data.person.telefono}
-                                    </td>
-
-                                    <td className="stylesTh-Td">
-                                        {data.notifications
-                                            ? "si"
-                                            : "no"
-                                        }
-                                    </td>
+                                <tr className="stylesTr" key={data.id}>
+                                    
+                                    <td className="stylesTh-Td">{data.nit}</td>
+                                    <td className="stylesTh-Td">{data.companyName}</td>
+                                    <td className="stylesTh-Td">{data.person.telefono}</td>
+                                    <td className="stylesTh-Td">{data.notifications? "si" : "no"}</td>
 
                                     <td>
                                         <div className="stylesContentButton">
