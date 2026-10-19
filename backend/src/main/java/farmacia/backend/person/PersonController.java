@@ -20,4 +20,9 @@ public class PersonController {
         return ResponseEntity.ok(personService.existsByCi(ci));
     }
 
+    @GetMapping("/existemail")
+    public ResponseEntity<Boolean> existEmail(@RequestParam String email){
+        return ResponseEntity.ok(personService.existByEmail(email));
+    }
+
 }

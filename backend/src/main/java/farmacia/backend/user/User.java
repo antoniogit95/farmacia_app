@@ -44,4 +44,5 @@ public class User {
     @OneToOne
     @JoinColumn (name = "id_person", referencedColumnName = "id")
     private Person person;
+    
 }

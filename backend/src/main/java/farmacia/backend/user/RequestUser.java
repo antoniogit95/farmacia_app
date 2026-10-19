@@ -1,0 +1,23 @@
+package farmacia.backend.user;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Builder 
+@Data 
+@NoArgsConstructor 
+@AllArgsConstructor 
+public class RequestUser {
+    
+    private String username;
+    private String password;
+    private String name;
+    private String surname;
+    private String ci;
+    //private String address;
+    private long telefono;
+    private String email;
+    private Role role;
+}

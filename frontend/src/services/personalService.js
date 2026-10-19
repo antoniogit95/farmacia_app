@@ -18,6 +18,16 @@ export const personalService = {
         return data;
     },
 
+    updatePassword: async ({ id, user }) => {
+        const { data } = await privateApi.put(`/user/resetpassword/${id}`, user);
+        return data;
+    },
+
+    block: async ({ id}) => {
+        const { data } = await privateApi.put(`/user/block/${id}`);
+        return data;
+    },
+
     existCi: async (ci) => {
         const { data } = await privateApi.get(
             `/person/existci?ci=${ci}`

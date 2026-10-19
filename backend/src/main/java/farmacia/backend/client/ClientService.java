@@ -69,8 +69,7 @@ public class ClientService {
     public ResponseEntity<Client> update(Long id, ClientRequest request){
         try {
             
-            Optional<Client> optionalClient =
-                    clientRepository.findById(id);
+            Optional<Client> optionalClient = clientRepository.findById(id);
 
             if(optionalClient.isEmpty()){
                 return ResponseEntity.notFound().build();

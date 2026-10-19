@@ -17,4 +17,8 @@ public class PersonService {
     public Person getPersonById( Long id){
         return null;
     }
+
+    public boolean existByEmail(String email){
+        return  personRepository.existsByEmail(email);
+    }
 }

@@ -57,17 +57,20 @@ export const TablesPersonal = () => {
                                     <div className="stylesContentButton-two">
                                         
                                         <button 
-                                        className="stylesButoonLogin"
-                                        onClick={() =>{
-                                            setSelectedPersonal(data);
-                                            setShowEditModal(true);
-                                        }}
+                                            className="stylesButoonLogin"
+                                            onClick={() =>{
+                                                setSelectedPersonal(data);
+                                                setShowEditModal(true);
+                                            }}
                                         > <FiEdit/>editar</button>
                                         
+                                        <button>cambiar comtraseña</button>
                                         <button 
                                         className="stylesButoonLogin">
                                             
-                                            <FiLock style={{ color: "red", marginRight: "5px"  }}/> Bloquear</button>
+                                            <FiLock style={{ color: "red", marginRight: "5px"  }}/> 
+                                            Bloquear/Desbloquear
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
