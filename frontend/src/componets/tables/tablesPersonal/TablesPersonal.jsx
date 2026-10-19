@@ -5,11 +5,15 @@ import { FiEdit,FiLock } from "react-icons/fi";
 import { useQuery } from "@tanstack/react-query";
 import { personalService } from "../../../services/personalService";
 import { EditPersonModal } from "../../Modals/personal/EditPersonal";
+import { EditPassword } from "../../Modals/personal/EditPassword";
 
 export const TablesPersonal = () => {
 
     const [selectedPersonal, setSelectedPersonal] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
+
+    const [selectedPassword, setSelectedPassword] = useState(null);
+    const [showPassworndModal, setShowPasswordModal] = useState(false)
 
     const {
         data: personal = [], 
@@ -37,24 +41,27 @@ export const TablesPersonal = () => {
                 <table className="styleTable">
                     <thead className="stylesHead">
                         <tr>
-                            <th className="stylesTh-Td">id</th>
-                            <th className="stylesTh-Td">nombre</th>
+                            <th className="stylesTh-Td">Nombre</th>
+                            <th className="stylesTh-Td">Apellidos</th>
                             <th className="stylesTh-Td">telefono</th>
                             <th className="stylesTh-Td">direccion</th>
                             <th className="stylesTh-Td">usuario</th>
+                            <th className="stylesTh-Td">estado</th>
                             <th className="stylesTh-Td">Opciones</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody className="stylesBody">
                         {personal.map((data) => (<> 
                             <tr className="stylesTr" key={data.id}>
+                                <td className="stylesTh-Td">{data.person?.name}</td>
+                                <td className="stylesTh-Td">{data.person?.surname}</td>
+                                <td className="stylesTh-Td">{data.person?.telefono}</td>
+                                <td className="stylesTh-Td">{data.person?.address}</td>
                                 <td className="stylesTh-Td">{data.username}</td>
-                                <td className="stylesTh-Td">{data.person.name}</td>
-                                <td className="stylesTh-Td">{data.username}</td>
-                                <td className="stylesTh-Td">{data.username}</td>
-                                <td className="stylesTh-Td">{data.username}</td>
-                                <td>
-                                    <div className="stylesContentButton-two">
+                                <td className="stylesTh-Td">{data.status? "si" : "no"}</td>
+                                <td colSpan={2}>
+                                    <div className="stylesContentButton-thre">
                                         
                                         <button 
                                             className="stylesButoonLogin"
@@ -64,7 +71,14 @@ export const TablesPersonal = () => {
                                             }}
                                         > <FiEdit/>editar</button>
                                         
-                                        <button>cambiar comtraseña</button>
+                                        <button 
+                                            className="stylesButoonLogin"
+                                            onClick={() =>{
+                                                setSelectedPassword(data);
+                                                setShowPasswordModal(true);
+                                            }}
+                                        >cambiar comtraseña</button>
+                                        
                                         <button 
                                         className="stylesButoonLogin">
                                             
@@ -88,5 +102,15 @@ export const TablesPersonal = () => {
             }}
             person={selectedPersonal}
         />
+
+        <EditPassword
+            show={{showPassworndModal}}
+            onHide={() =>{
+                setSelectedPassword(null);
+                setShowPasswordModal(false)
+            }}
+            person={selectedPassword}
+        />
+
     </>);
 }
